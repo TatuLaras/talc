@@ -1,9 +1,9 @@
-# TODO: Make dynamic w/ https://www.throwtheswitch.org/build/make
+# TODO: Make dynamic with https://www.throwtheswitch.org/build/make
 CC = gcc
-CFLAGS = -Wall
+CFLAGS = -Wall -ggdb
 
 test:
-	$(CC) $(CFLAGS) -o build/test1 test1.c ../src/testable.c ../src/external/unity.c
+	$(CC) $(CFLAGS) -o build/test_dynamic_array test_dynamic_array.c ../src/external/unity.c ../src/dynamic_array.c
 
 run: test
-	build/test1
+	build/test_dynamic_array
