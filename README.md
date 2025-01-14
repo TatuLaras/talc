@@ -1,0 +1,1 @@
+# Talc: tieteellinen laskin terminaalikäyttöliittymässä
