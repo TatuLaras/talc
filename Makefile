@@ -1,10 +1,18 @@
 CC = gcc
-CFLAGS = -Wall
+CFLAGS = -Wall -ggdb
+CFLAGS_RELEASE = -Wall
 
 SRC = $(wildcard src/*.c)
 
-talc: $(SRC)
+debug: $(SRC)
+	echo "DEBUG"
 	$(CC) -o build/$@ $^ $(CFLAGS)
 
-run: talc
+release: $(SRC)
+	echo "RELEASE"
+	$(CC) -o build/$@ $^ $(CFLAGS_RELEASE)
+
+run: debug
 	build/talc
+
+
