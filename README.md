@@ -4,7 +4,7 @@
 [Määrittelydokumentti](https://github.com/TatuLaras/talc/blob/master/docs/m%C3%A4%C3%A4rittely.md)
 
 ## Kääntöohjeet
-Tämä ohje olettaa että käytät Unix-pohjaisella käyttöjärjestelmää, sekä `gcc` -kääntäjä ja `make` -ohjelma ovat asennettuina. 
+Tämä ohje olettaa että käytät Unix-pohjaista käyttöjärjestelmää, sekä `gcc` -kääntäjä ja `make` -ohjelma ovat asennettuina. 
 
 Kääntääksesi koko projektin aja projektin juuressa:
 ```bash
