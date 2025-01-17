@@ -1,5 +1,5 @@
 # Talc: tieteellinen laskin terminaalikäyttöliittymässä
-Ohjelma on C-kielellä toteutettu terminaalikäyttöliittymän (TUI) kautta käytettävä tieteellinen laskin. 
+(WIP) Ohjelma on C-kielellä toteutettu terminaalikäyttöliittymän (TUI) kautta käytettävä tieteellinen laskin. 
 
 [Määrittelydokumentti](https://github.com/TatuLaras/talc/blob/master/docs/m%C3%A4%C3%A4rittely.md)
 
