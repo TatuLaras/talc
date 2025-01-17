@@ -14,8 +14,7 @@ Muuttujan määrittely (`muuttuja=`) voi esiintyä vain syötteen alussa.
 
 ## Toteutus
 
-Käyttäjän syöte jaetaan ensin symboleiksi yksinkertaisella iteroinnilla tiettyjä sääntöjä noudattaen erityyppisten symbolien tunnistamiseksi.
-Tämän jälkeen symbolit muunnetaan infix- muodosta [Reverse Polish Notation](https://en.wikipedia.org/wiki/Reverse_Polish_notation) -muotoon 
+Käyttäjän syöttämä lauseke muunnetaan infix- muodosta [Reverse Polish Notation](https://en.wikipedia.org/wiki/Reverse_Polish_notation) -muotoon 
 [Shunting Yard](https://en.wikipedia.org/wiki/Shunting_yard_algorithm) -algoritmilla. 
 RPN-muodosta lopullinen arvo lasketaan pinoa käyttäen, mahdolliset lausekkeessa käytetyt muuttujat huomioonottaen.
 
