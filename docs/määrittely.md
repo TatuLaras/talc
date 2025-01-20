@@ -1,7 +1,14 @@
 # Määrittelydokumentti
 
+Koulutusohjelma: tietojenkäsittelytieteen kandidaatti
+
+Luulisin kykeneväni vertaisarvioimaan useimpia C-syntaksisia kieliä. Myös Rust on tuttu.
+
 Ohjelma on C-kielellä toteutettava terminaalikäyttöliittymän (TUI) kautta käytettävä tieteellinen laskin. 
 Käyttäjä voi syöttää laskimeen lausekkeita ja ohjelma antaa lausekkeen arvon.
+
+
+
 
 ## Ominaisuudet
 - Syöte voi sisältää kokonaislukuja ja desimaalilukuja
@@ -16,7 +23,9 @@ Muuttujan määrittely (`muuttuja=`) voi esiintyä vain syötteen alussa.
 
 Käyttäjän syöttämä lauseke muunnetaan infix- muodosta [Reverse Polish Notation](https://en.wikipedia.org/wiki/Reverse_Polish_notation) -muotoon 
 [Shunting Yard](https://en.wikipedia.org/wiki/Shunting_yard_algorithm) -algoritmilla. 
-RPN-muodosta lopullinen arvo lasketaan pinoa käyttäen, mahdolliset lausekkeessa käytetyt muuttujat huomioonottaen.
+Shunting Yard -algoritmin aikavaativuus on $O(n)$.
+Algoritmi käyttää tietorakenteina pinoa ja jonoa.
+RPN-muodosta lopullinen lasketaan lopullinen arvo, mahdolliset lausekkeessa käytetyt muuttujat huomioonottaen.
 
 Ohjelma erottaa muuttujat ja funktion nimet siitä, että funktion nimeä seuraa `(` -symboli.
 Mikäli syöte on virheellinen, tai syöte sisältää funtiota tai muuttujia joita ei ole olemassa, palautetaan virhe.
