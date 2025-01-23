@@ -1,6 +1,6 @@
 #define TB_IMPL
 #include "external/termbox2.h"
-#include "lexer.h"
+#include "symbol.h"
 
 int main() {
     struct tb_event ev;

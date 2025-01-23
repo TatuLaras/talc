@@ -28,7 +28,7 @@ void test_stack_should_contain_pushed_values() {
     SymbolStack stack = {0};
     stack_init(&stack);
 
-    int values[6] = {12, 23, 34, 45, 56, 9922};
+    int8_t values[6] = {12, 23, 34, 45, 56, 230};
 
     for (int i = 0; i < 6; i++) {
         Symbol symbol = {.symbol_type = values[i]};
@@ -44,7 +44,7 @@ void test_stack_popping_works() {
     SymbolStack stack = {0};
     stack_init(&stack);
 
-    int values[6] = {12, 23, 34, 45, 56, 9922};
+    int8_t values[6] = {12, 23, 34, 45, 56, 230};
 
     for (int i = 0; i < 6; i++) {
         Symbol symbol = {.symbol_type = values[i]};
