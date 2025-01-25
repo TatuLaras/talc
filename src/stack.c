@@ -42,7 +42,10 @@ int stack_pop(SymbolStack *stack, Symbol *out_symbol) {
         return 1;
     }
 
-    *out_symbol = stack->__array[--stack->__top];
+    stack->__top--;
+
+    if (out_symbol)
+        *out_symbol = stack->__array[stack->__top];
 
     return 0;
 }
