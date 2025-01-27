@@ -1,9 +1,9 @@
 #ifndef _SYMBOL
 #define _SYMBOL
+#include <stdint.h>
 
 // data: none
 // used to catch errors
-#include <stdint.h>
 #define SYMBOL_NULL 0
 // data: none
 #define SYMBOL_PARENTHESIS_OPEN 1
@@ -24,7 +24,6 @@ typedef struct {
     int8_t symbol_type;
 
     // symbol_type determines which of these fields gets used
-    //  TODO: Safer alternative
     int8_t operator_precedence;
     int64_t literal_integer;
     double literal_floating;

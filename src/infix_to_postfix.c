@@ -73,6 +73,7 @@ int str_to_symbols_postfix(char *src_str, SymbolStack *output_stack) {
         Symbol numeric_literal = {.symbol_type = SYMBOL_LITERAL_INTEGER,
                                   .literal_integer =
                                       strtol(current_symbol, 0, 10)};
+        asm("int $3");
         push_symbol_with_shunting_yard(numeric_literal, output_stack,
                                        &holding_stack);
     }

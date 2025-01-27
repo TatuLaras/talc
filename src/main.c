@@ -1,43 +1,25 @@
 #define TB_IMPL
 #include "external/termbox2.h"
-#include "symbol.h"
+#include "infix_to_postfix.h"
+#include "user_interface.h"
 
 int main() {
-    struct tb_event ev;
-    int cursor_x = 0;
-    int cursor_y = 0;
 
-    tb_init();
+    UserInterface ui = {0};
 
-    char *str = "Hello this is me!";
+    ui_init(&ui);
+
+    char input_expression[UI_INPUT_BUFFER_SIZE] = {0};
+
     while (1) {
-        tb_printf(2, 2, TB_CYAN, 0, "width=%d height=%d", tb_width(),
-                  tb_height());
-
-        Symbol symbols[1024] = {0};
-        // divide_into_symbols(str, symbols, 1024);
-
-        tb_printf(2, 3, TB_RED, 0, "str: %s", symbols);
-
-        tb_set_cursor(cursor_x, cursor_y);
-        tb_present();
-
-        tb_poll_event(&ev);
-
-        if (ev.ch == 'q')
+        int code = ui_main(&ui, input_expression);
+        if (code == UI_CODE_QUIT)
             break;
-
-        if (ev.ch == 'h')
-            cursor_x--;
-        if (ev.ch == 'j')
-            cursor_y++;
-        if (ev.ch == 'k')
-            cursor_y--;
-        if (ev.ch == 'l')
-            cursor_x++;
+        if (code == UI_CODE_INPUT_READY)
+            str_to_symbols_postfix(input_expression, &ui.results);
     }
 
-    tb_shutdown();
+    ui_shutdown(&ui);
 
     return 0;
 }

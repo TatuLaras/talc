@@ -13,6 +13,6 @@ release: $(SRC)
 	$(CC) -o build/$@ $^ $(CFLAGS_RELEASE)
 
 run: debug
-	build/talc
+	build/debug
 
 
