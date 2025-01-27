@@ -2,7 +2,13 @@
 
 Koulutusohjelma: tietojenkäsittelytieteen kandidaatti
 
-Luulisin kykeneväni vertaisarvioimaan useimpia C-syntaksisia kieliä. Myös Rust on tuttu.
+Ainakin seuraavia kieliä voin vertaisarvioida:
+- C, C++, C#
+- Python, JavaScript
+- Rust
+
+Useimmat C-syntaksiset kielet luultavasti onnistuu.
+
 
 Ohjelma on C-kielellä toteutettava terminaalikäyttöliittymän (TUI) kautta käytettävä tieteellinen laskin. 
 Käyttäjä voi syöttää laskimeen lausekkeita ja ohjelma antaa lausekkeen arvon.
