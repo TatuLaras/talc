@@ -37,6 +37,15 @@ int stack_peek_from_top(SymbolStack *stack, int n, Symbol *out_symbol) {
     return 0;
 }
 
+int stack_get(SymbolStack *stack, int i, Symbol *out_symbol) {
+    if (i >= stack->__top || i < 0)
+        return 1;
+
+    *out_symbol = stack->__array[i];
+
+    return 0;
+}
+
 int stack_pop(SymbolStack *stack, Symbol *out_symbol) {
     if (stack->__top == 0) {
         return 1;

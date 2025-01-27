@@ -32,4 +32,6 @@ int stack_pop(SymbolStack *stack, Symbol *out_symbol);
 // Returns 1 if n is out of bounds
 int stack_peek_from_top(SymbolStack *stack, int n, Symbol *out_symbol);
 
+int stack_get(SymbolStack *stack, int i, Symbol *out_symbol);
+
 #endif
