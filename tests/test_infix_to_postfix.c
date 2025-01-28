@@ -1,12 +1,12 @@
 #include "../src/external/unity.h"
 #include "../src/infix_to_postfix.h"
-#include "../src/stack.h"
+#include "../src/queue.h"
 
-static SymbolStack symbols = {0};
+static SymbolQueue symbols = {0};
 
-void setUp() { stack_init(&symbols); }
+void setUp() { queue_init(&symbols); }
 
-void tearDown() { stack_free(&symbols); }
+void tearDown() { queue_free(&symbols); }
 
 void test_fails_with_invalid_characters_in_input() {
     char *src_str = "15  !? +  540     / 3*100001^2";
@@ -17,7 +17,7 @@ void test_converts_correctly_basic_operations_with_integers() {
     char *second_src_str = "15   +  540     / 3*  100001 ^2";
 
     TEST_ASSERT_FALSE(str_to_symbols_postfix(second_src_str, &symbols));
-    TEST_ASSERT_EQUAL(9, symbols.__top);
+    TEST_ASSERT_EQUAL(9, symbols.__used);
 
     // Correct RPN: 15 540 3 / 100001 2 ^ * +
 

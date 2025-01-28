@@ -1,7 +1,5 @@
 #include "user_interface.h"
 #include "external/termbox2.h"
-#include "stack.h"
-#include "symbol.h"
 
 static void ui_input_character(UserInterface *ui, char character) {
     if (ui->input_buffer_used >= UI_INPUT_BUFFER_SIZE ||
@@ -33,25 +31,17 @@ static void ui_render_input_line(UserInterface *ui) {
     }
 }
 
+// Renders the contents of the results buffer onto the TUI
 static void ui_render_results(UserInterface *ui) {
     int line = tb_height() - 3;
     int i = 0;
 
-    Symbol symbol = {0};
-    while (!stack_peek_from_top(&ui->results, i, &symbol)) {
+    Result result = {.expression = "2+2"};
+    while (!results_buffer_get_latest(&ui->results, i, &result)) {
         i++;
 
-        if (symbol.symbol_type != SYMBOL_LITERAL_DECIMAL &&
-            symbol.symbol_type != SYMBOL_LITERAL_INTEGER)
-            continue;
-
-        if (symbol.symbol_type == SYMBOL_LITERAL_DECIMAL)
-            tb_printf(2, line--, TB_DEFAULT, TB_DEFAULT, "$%d  %f", i,
-                      symbol.literal_floating);
-
-        if (symbol.symbol_type == SYMBOL_LITERAL_INTEGER)
-            tb_printf(2, line--, TB_DEFAULT, TB_DEFAULT, "$%d  %d", i,
-                      symbol.literal_integer);
+        tb_printf(2, line--, TB_DEFAULT, TB_DEFAULT, "$%d  %lg", i,
+                  result.result);
     }
 }
 
@@ -103,15 +93,12 @@ static void ui_render(UserInterface *ui) {
     tb_present();
 }
 
-void ui_init(UserInterface *ui) {
-    tb_init();
-    stack_init(&ui->results);
-}
+void ui_init(UserInterface *ui) { tb_init(); }
 
 void ui_shutdown(UserInterface *ui) { tb_shutdown(); }
 
-void ui_append_result(UserInterface *ui, Symbol result) {
-    stack_push(&ui->results, result);
+void ui_append_result(UserInterface *ui, Result result) {
+    results_buffer_push(&ui->results, result);
 }
 
 int ui_main(UserInterface *ui, char *out_expression) {

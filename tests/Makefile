@@ -2,18 +2,22 @@
 CC = gcc
 CFLAGS = -Wall -ggdb
 
-all: test_stack test_infix_to_postfix test_queue
+all: test_stack test_infix_to_postfix test_queue test_double_stack
+
+test_double_stack: test_double_stack.c
+	$(CC) $(CFLAGS) -o build/test_double_stack test_double_stack.c  ../src/external/unity.c ../src/double_stack.c
 
 test_stack: test_stack.c
-	$(CC) $(CFLAGS) -o build/test_stack test_stack.c  ../src/external/unity.c ../src/stack.c
+	$(CC) $(CFLAGS) -o build/test_stack test_stack.c  ../src/external/unity.c ../src/symbol_stack.c
 
 test_infix_to_postfix: test_infix_to_postfix.c
-	$(CC) $(CFLAGS) -o build/test_infix_to_postfix test_infix_to_postfix.c  ../src/external/unity.c ../src/infix_to_postfix.c ../src/stack.c
+	$(CC) $(CFLAGS) -o build/test_infix_to_postfix test_infix_to_postfix.c  ../src/external/unity.c ../src/infix_to_postfix.c ../src/symbol_stack.c ../src/queue.c
 
 test_queue: test_queue.c
-	$(CC) $(CFLAGS) -o build/test_queue test_queue.c  ../src/external/unity.c ../src/queue.c ../src/stack.c
+	$(CC) $(CFLAGS) -o build/test_queue test_queue.c  ../src/external/unity.c ../src/queue.c ../src/symbol_stack.c
 
 run: all
 	build/test_stack
+	build/test_double_stack
 	build/test_infix_to_postfix
 	build/test_queue

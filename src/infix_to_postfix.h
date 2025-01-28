@@ -1,17 +1,12 @@
-#ifndef _LEXER
-#define _LEXER
+#ifndef _SHUNTING
+#define _SHUNTING
 
-#include "stack.h"
+#include "queue.h"
 #include "symbol.h"
-#include <stddef.h>
+#include "symbol_stack.h"
 
-int str_to_symbols_postfix(char *src_str, SymbolStack *dst_stack);
-static int push_symbol_with_shunting_yard(Symbol symbol,
-                                          SymbolStack *output_stack,
-                                          SymbolStack *holding_stack);
-int drain_holding_stack_into_output(SymbolStack *output_stack,
-                                    SymbolStack *holding_stack);
-
-Symbol parse_operator(char op);
+// Attempts to covert a string expression in src_str to postfix / RPN form,
+// returns 1 on failure due to an invalid source expression.
+int str_to_symbols_postfix(char *src_str, SymbolQueue *output_queue);
 
 #endif

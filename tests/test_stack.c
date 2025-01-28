@@ -1,5 +1,5 @@
 #include "../src/external/unity.h"
-#include "../src/stack.h"
+#include "../src/symbol_stack.h"
 
 void setUp() {}
 

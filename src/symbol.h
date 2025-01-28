@@ -9,6 +9,10 @@
 #define SYMBOL_PARENTHESIS_OPEN 1
 // data: none
 #define SYMBOL_PARENTHESIS_CLOSE 2
+
+//  TODO: just make everything decimals, no need to have separate integers and
+//  decimals in the symbol data structure
+
 // data: floating
 #define SYMBOL_LITERAL_DECIMAL 3
 // data: int

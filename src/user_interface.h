@@ -4,7 +4,9 @@
 #ifndef _UI
 #define _UI
 
-#include "stack.h"
+#include "results_buffer.h"
+#include "symbol.h"
+#include "symbol_stack.h"
 
 #define UI_INPUT_BUFFER_SIZE 1024
 
@@ -15,7 +17,7 @@ typedef struct {
     char input_buffer[UI_INPUT_BUFFER_SIZE];
     int input_buffer_used;
     int input_buffer_cursor;
-    SymbolStack results;
+    ResultsBuffer results;
 } UserInterface;
 
 // Initializes the necessary internal buffers.
@@ -25,7 +27,7 @@ void ui_init(UserInterface *ui);
 
 // Appends a result to the list of results that can be rendered via the
 // ui_render_results function
-void ui_append_result(UserInterface *ui, Symbol result);
+void ui_append_result(UserInterface *ui, Result result);
 
 // Renders the TUI according to state in UserInterface struct and responds to
 // keyboard input
