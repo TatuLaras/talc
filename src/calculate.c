@@ -1,5 +1,6 @@
 #include "calculate.h"
 #include "symbol.h"
+#include <math.h>
 
 int calculate_value(SymbolQueue *postfix_expression, double *out_result) {
     DoubleStack holding_stack = {0};
@@ -22,11 +23,59 @@ int calculate_value(SymbolQueue *postfix_expression, double *out_result) {
             // Pop operands
             double first = {0};
             double second = {0};
-            double_stack_pop(&holding_stack, &first);
             double_stack_pop(&holding_stack, &second);
+            double_stack_pop(&holding_stack, &first);
 
             // Push result
             double_stack_push(&holding_stack, first + second);
+        } break;
+        case SYMBOL_OP_SUBTRACTION: {
+            if (holding_stack.__top < 2)
+                return 1;
+
+            double first = {0};
+            double second = {0};
+            double_stack_pop(&holding_stack, &second);
+            double_stack_pop(&holding_stack, &first);
+
+            double_stack_push(&holding_stack, first - second);
+        } break;
+        case SYMBOL_OP_DIVISION: {
+            if (holding_stack.__top < 2)
+                return 1;
+
+            double first = {0};
+            double second = {0};
+            double_stack_pop(&holding_stack, &second);
+            double_stack_pop(&holding_stack, &first);
+
+            // Can't divide by 0
+            if (second == 0)
+                return 1;
+
+            double_stack_push(&holding_stack, first / second);
+        } break;
+        case SYMBOL_OP_MULTIPLICATION: {
+            if (holding_stack.__top < 2)
+                return 1;
+
+            double first = {0};
+            double second = {0};
+            double_stack_pop(&holding_stack, &second);
+            double_stack_pop(&holding_stack, &first);
+
+            double_stack_push(&holding_stack, first * second);
+        } break;
+        case SYMBOL_OP_EXPONENT: {
+            if (holding_stack.__top < 2)
+                return 1;
+
+            double first = {0};
+            double second = {0};
+            double_stack_pop(&holding_stack, &second);
+            double_stack_pop(&holding_stack, &first);
+
+            double_stack_push(&holding_stack, pow(first, second));
         } break;
         }
     }

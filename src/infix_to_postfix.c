@@ -33,6 +33,15 @@ static Symbol parse_operator(char op) {
         operator_type = SYMBOL_OP_EXPONENT;
         operator_precedence = 5;
     } break;
+    case '(': {
+        operator_type = SYMBOL_PARENTHESIS_OPEN;
+    } break;
+    case ')': {
+        operator_type = SYMBOL_PARENTHESIS_CLOSE;
+    } break;
+    default: {
+        operator_type = SYMBOL_NULL;
+    } break;
     }
 
     Symbol symbol = {.symbol_type = operator_type,
@@ -48,6 +57,33 @@ static int push_symbol_with_shunting_yard(Symbol symbol,
         queue_enqueue(output_queue, symbol);
         return 0;
     }
+
+    // '(' goes straight to holding stack
+    if (symbol.symbol_type == SYMBOL_PARENTHESIS_OPEN) {
+        stack_push(holding_stack, symbol);
+        return 0;
+    }
+
+    // Pop symbols from holding stack into output until open parenthesis has
+    // been popped
+    // Return 1 if no open parenthesis was found
+    if (symbol.symbol_type == SYMBOL_PARENTHESIS_CLOSE) {
+        Symbol top_symbol = {0};
+        int open_parenthesis_found = 0;
+        while (!stack_pop(holding_stack, &top_symbol)) {
+            if (top_symbol.symbol_type == SYMBOL_PARENTHESIS_OPEN) {
+                open_parenthesis_found = 1;
+                break;
+            }
+
+            queue_enqueue(output_queue, top_symbol);
+        }
+
+        return !open_parenthesis_found;
+    }
+
+    // Pop symbol from holding stack while the to be inserted symbol has lower
+    // precedence
 
     Symbol top_symbol = {0};
     stack_peek_from_top(holding_stack, 0, &top_symbol);
@@ -66,10 +102,10 @@ static int push_symbol_with_shunting_yard(Symbol symbol,
 
 int drain_holding_stack_into_output(SymbolQueue *output_queue,
                                     SymbolStack *holding_stack) {
-    while (holding_stack->__top > 0) {
-        Symbol out_symbol = {0};
-
-        if (stack_pop(holding_stack, &out_symbol))
+    Symbol out_symbol = {0};
+    while (!stack_pop(holding_stack, &out_symbol)) {
+        if (out_symbol.symbol_type == SYMBOL_PARENTHESIS_OPEN ||
+            out_symbol.symbol_type == SYMBOL_PARENTHESIS_CLOSE)
             return 1;
 
         queue_enqueue(output_queue, out_symbol);
@@ -78,6 +114,7 @@ int drain_holding_stack_into_output(SymbolQueue *output_queue,
     return 0;
 }
 
+//  TODO: Error codes other than 1 for general failure
 int str_to_symbols_postfix(char *src_str, SymbolQueue *output_queue) {
     SymbolStack holding_stack = {0};
     stack_init(&holding_stack);
@@ -118,24 +155,28 @@ int str_to_symbols_postfix(char *src_str, SymbolQueue *output_queue) {
             continue;
         }
 
-        if (src_str[i] == '+' || src_str[i] == '-' || src_str[i] == '*' ||
-            src_str[i] == '/' || src_str[i] == '^') {
+        // Try to parse a single character operator
+        Symbol op = parse_operator(src_str[i]);
+        if (op.symbol_type != SYMBOL_NULL) {
 
-            // Ensure null-termination
-            current_symbol[current_symbol_length] = 0;
+            if (current_symbol_length > 0) {
+                // Ensure null-termination
+                current_symbol[current_symbol_length] = 0;
+                // Push numeric symbol to output
+                //  TODO: Fail if overflows instead of wrapping
+                Symbol numeric_literal = {.symbol_type = SYMBOL_LITERAL,
+                                          .literal = strtod(current_symbol, 0)};
+                if (push_symbol_with_shunting_yard(
+                        numeric_literal, output_queue, &holding_stack))
+                    return 1;
 
-            // Push numeric symbol to output
-            //  TODO: Fail if overflows instead of wrapping
-            Symbol numeric_literal = {.symbol_type = SYMBOL_LITERAL,
-                                      .literal = strtod(current_symbol, 0)};
-            push_symbol_with_shunting_yard(numeric_literal, output_queue,
-                                           &holding_stack);
-
-            current_symbol_length = 0;
+                current_symbol_length = 0;
+            }
 
             // Push operator to output
-            Symbol op = parse_operator(src_str[i]);
-            push_symbol_with_shunting_yard(op, output_queue, &holding_stack);
+            if (push_symbol_with_shunting_yard(op, output_queue,
+                                               &holding_stack))
+                return 1;
             continue;
         }
 
@@ -152,10 +193,12 @@ int str_to_symbols_postfix(char *src_str, SymbolQueue *output_queue) {
         // Push numeric symbol to output
         Symbol numeric_literal = {.symbol_type = SYMBOL_LITERAL,
                                   .literal = strtod(current_symbol, 0)};
-        push_symbol_with_shunting_yard(numeric_literal, output_queue,
-                                       &holding_stack);
+
+        if (push_symbol_with_shunting_yard(numeric_literal, output_queue,
+                                           &holding_stack))
+            return 1;
     }
 
-    drain_holding_stack_into_output(output_queue, &holding_stack);
-    return 0;
+    // Returns possible error code
+    return drain_holding_stack_into_output(output_queue, &holding_stack);
 }

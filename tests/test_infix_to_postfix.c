@@ -14,12 +14,12 @@ void test_fails_with_invalid_characters_in_input() {
 }
 
 void test_fails_with_unmatching_parenthesis() {
-    char *expression = "(((15+9))";
+    char *expression = "(4 + ((15+9))";
     TEST_ASSERT(str_to_symbols_postfix(expression, &symbols));
 }
 
 void test_fails_with_unmatching_parenthesis_right() {
-    char *expression = "((15+9)))";
+    char *expression = "((15+9)) + 3)";
     TEST_ASSERT(str_to_symbols_postfix(expression, &symbols));
 }
 

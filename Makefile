@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -ggdb
+CFLAGS = -Wall -ggdb -lm
 CFLAGS_RELEASE = -Wall
 
 SRC = $(wildcard src/*.c)
