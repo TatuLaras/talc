@@ -1,13 +1,6 @@
 #include "calculate.h"
 #include "symbol.h"
 
-double symbol_as_double(Symbol *symbol) {
-    if (symbol->symbol_type == SYMBOL_LITERAL_INTEGER)
-        return (double)symbol->literal_integer;
-
-    return symbol->literal_floating;
-}
-
 int calculate_value(SymbolQueue *postfix_expression, double *out_result) {
     DoubleStack holding_stack = {0};
     double_stack_init(&holding_stack);
@@ -15,10 +8,8 @@ int calculate_value(SymbolQueue *postfix_expression, double *out_result) {
     Symbol current_symbol = {0};
     while (!queue_dequeue(postfix_expression, &current_symbol)) {
         // If it's a numeric literal we push it as a double to the holding stack
-        if (current_symbol.symbol_type == SYMBOL_LITERAL_INTEGER ||
-            current_symbol.symbol_type == SYMBOL_LITERAL_DECIMAL) {
-            double_stack_push(&holding_stack,
-                              symbol_as_double(&current_symbol));
+        if (current_symbol.symbol_type == SYMBOL_LITERAL) {
+            double_stack_push(&holding_stack, current_symbol.literal);
             continue;
         }
 

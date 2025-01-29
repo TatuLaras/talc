@@ -44,8 +44,7 @@ static int push_symbol_with_shunting_yard(Symbol symbol,
                                           SymbolQueue *output_queue,
                                           SymbolStack *holding_stack) {
     // Numeric literals go straight to output
-    if (symbol.symbol_type == SYMBOL_LITERAL_INTEGER ||
-        symbol.symbol_type == SYMBOL_LITERAL_DECIMAL) {
+    if (symbol.symbol_type == SYMBOL_LITERAL) {
         queue_enqueue(output_queue, symbol);
         return 0;
     }
@@ -112,6 +111,13 @@ int str_to_symbols_postfix(char *src_str, SymbolQueue *output_queue) {
             continue;
         }
 
+        if (src_str[i] == '.') {
+            if (current_symbol_length > 0 && isalpha(current_symbol[0]))
+                return 1;
+            current_symbol[current_symbol_length++] = src_str[i];
+            continue;
+        }
+
         if (src_str[i] == '+' || src_str[i] == '-' || src_str[i] == '*' ||
             src_str[i] == '/' || src_str[i] == '^') {
 
@@ -120,9 +126,8 @@ int str_to_symbols_postfix(char *src_str, SymbolQueue *output_queue) {
 
             // Push numeric symbol to output
             //  TODO: Fail if overflows instead of wrapping
-            Symbol numeric_literal = {.symbol_type = SYMBOL_LITERAL_INTEGER,
-                                      .literal_integer =
-                                          strtol(current_symbol, 0, 10)};
+            Symbol numeric_literal = {.symbol_type = SYMBOL_LITERAL,
+                                      .literal = strtod(current_symbol, 0)};
             push_symbol_with_shunting_yard(numeric_literal, output_queue,
                                            &holding_stack);
 
@@ -142,10 +147,11 @@ int str_to_symbols_postfix(char *src_str, SymbolQueue *output_queue) {
         // Ensure null-termination
         current_symbol[current_symbol_length] = 0;
 
+        //  TODO: could be a variable
+
         // Push numeric symbol to output
-        Symbol numeric_literal = {.symbol_type = SYMBOL_LITERAL_INTEGER,
-                                  .literal_integer =
-                                      strtol(current_symbol, 0, 10)};
+        Symbol numeric_literal = {.symbol_type = SYMBOL_LITERAL,
+                                  .literal = strtod(current_symbol, 0)};
         push_symbol_with_shunting_yard(numeric_literal, output_queue,
                                        &holding_stack);
     }
