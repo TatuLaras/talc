@@ -204,6 +204,35 @@ void test_coverts_correctly_nested_parenthesis() {
     i++;
 }
 
+void test_signed_numeric_literals() {
+    char *expression = "-5-2+3+-2";
+    // Correct RPN: -5 2 - 3 + -2 +
+
+    TEST_ASSERT_FALSE(str_to_symbols_postfix(expression, &symbols));
+    TEST_ASSERT_EQUAL(7, symbols.__used);
+
+    int i = 0;
+
+    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(-5, symbols.__array[i].literal);
+    i++;
+    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(2, symbols.__array[i].literal);
+    i++;
+    TEST_ASSERT_EQUAL(SYMBOL_OP_SUBTRACTION, symbols.__array[i].symbol_type);
+    i++;
+    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(3, symbols.__array[i].literal);
+    i++;
+    TEST_ASSERT_EQUAL(SYMBOL_OP_ADDITION, symbols.__array[i].symbol_type);
+    i++;
+    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(-2, symbols.__array[i].literal);
+    i++;
+    TEST_ASSERT_EQUAL(SYMBOL_OP_ADDITION, symbols.__array[i].symbol_type);
+    i++;
+}
+
 int main() {
     UNITY_BEGIN();
 
@@ -215,6 +244,7 @@ int main() {
     RUN_TEST(test_fails_with_unmatching_parenthesis_right);
     RUN_TEST(test_does_not_fail_with_matching_parenthesis);
     RUN_TEST(test_coverts_correctly_nested_parenthesis);
+    RUN_TEST(test_signed_numeric_literals);
 
     return UNITY_END();
 }

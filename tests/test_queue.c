@@ -66,29 +66,29 @@ void test_over_dequeing_should_fail() {
     TEST_ASSERT(queue_dequeue(&queue, 0));
 }
 
-// void test_out_of_bounds_value_should_fail() {
-//     SymbolQueue queue = {0};
-//     queue_init(&queue);
-//
-//     int values[6] = {12, 23, 34, 45, 56, 9922};
-//
-//     for (int i = 0; i < 6; i++) {
-//         Symbol symbol = {.symbol_type = values[i]};
-//         queue_enqueue(&queue, symbol);
-//     }
-//
-//     Symbol out_symbol = {0};
-//     queue_peek_from_top(&queue, 2, &out_symbol);
-//     TEST_ASSERT_EQUAL(45, out_symbol.symbol_type);
-//
-//     // These two should not affect the out_symbol variable
-//     //   and should return 1 indicating an error
-//     TEST_ASSERT(queue_peek_from_top(&queue, 6, &out_symbol));
-//     TEST_ASSERT_EQUAL(45, out_symbol.symbol_type);
-//
-//     TEST_ASSERT(queue_peek_from_top(&queue, -1, &out_symbol));
-//     TEST_ASSERT_EQUAL(45, out_symbol.symbol_type);
-// }
+void test_out_of_bounds_value_should_fail() {
+    SymbolQueue queue = {0};
+    queue_init(&queue);
+
+    int values[6] = {12, 23, 34, 45, 56, 9922};
+
+    for (int i = 0; i < 6; i++) {
+        Symbol symbol = {.symbol_type = values[i]};
+        queue_enqueue(&queue, symbol);
+    }
+
+    Symbol out_symbol = {0};
+    queue_peek_from_back(&queue, 2, &out_symbol);
+    TEST_ASSERT_EQUAL(45, out_symbol.symbol_type);
+
+    // These two should not affect the out_symbol variable
+    //   and should return 1 indicating an error
+    TEST_ASSERT(queue_peek_from_back(&queue, 6, &out_symbol));
+    TEST_ASSERT_EQUAL(45, out_symbol.symbol_type);
+
+    TEST_ASSERT(queue_peek_from_back(&queue, -1, &out_symbol));
+    TEST_ASSERT_EQUAL(45, out_symbol.symbol_type);
+}
 
 int main() {
     UNITY_BEGIN();
@@ -96,5 +96,6 @@ int main() {
     RUN_TEST(test_queue_should_contain_pushed_values);
     RUN_TEST(test_queue_dequeueing_works);
     RUN_TEST(test_over_dequeing_should_fail);
+    RUN_TEST(test_out_of_bounds_value_should_fail);
     return UNITY_END();
 }

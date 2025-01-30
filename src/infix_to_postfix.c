@@ -19,19 +19,19 @@ static Symbol parse_operator(char op) {
     } break;
     case '+': {
         operator_type = SYMBOL_OP_ADDITION;
-        operator_precedence = 2;
+        operator_precedence = 1;
     } break;
     case '*': {
         operator_type = SYMBOL_OP_MULTIPLICATION;
-        operator_precedence = 3;
+        operator_precedence = 2;
     } break;
     case '/': {
         operator_type = SYMBOL_OP_DIVISION;
-        operator_precedence = 4;
+        operator_precedence = 3;
     } break;
     case '^': {
         operator_type = SYMBOL_OP_EXPONENT;
-        operator_precedence = 5;
+        operator_precedence = 4;
     } break;
     case '(': {
         operator_type = SYMBOL_PARENTHESIS_OPEN;
@@ -89,7 +89,7 @@ static int push_symbol_with_shunting_yard(Symbol symbol,
     stack_peek_from_top(holding_stack, 0, &top_symbol);
 
     while (holding_stack->__top > 0 &&
-           symbol.operator_precedence < top_symbol.operator_precedence) {
+           symbol.operator_precedence <= top_symbol.operator_precedence) {
         stack_pop(holding_stack, &top_symbol);
         queue_enqueue(output_queue, top_symbol);
         stack_peek_from_top(holding_stack, 0, &top_symbol);
@@ -114,7 +114,7 @@ int drain_holding_stack_into_output(SymbolQueue *output_queue,
     return 0;
 }
 
-//  TODO: Error codes other than 1 for general failure
+//  TODO: Error codes other than 1 for failure
 int str_to_symbols_postfix(char *src_str, SymbolQueue *output_queue) {
     SymbolStack holding_stack = {0};
     stack_init(&holding_stack);
@@ -127,10 +127,30 @@ int str_to_symbols_postfix(char *src_str, SymbolQueue *output_queue) {
 
     int current_symbol_length = 0;
 
+    int previous_symbol_was_closed_parenthesis = 0;
+
     // Iterate over string
     for (size_t i = 0; src_str[i] != 0; i++) {
         if (src_str[i] == ' ')
             continue;
+
+        // If the first character in the current symbol is a '-', interpret it
+        // as part of a new numeric literal, as opposed to the operator '-'
+        // which is preceded by some numeric literal.
+        if (current_symbol_length == 0 &&
+            !previous_symbol_was_closed_parenthesis && src_str[i] == '-') {
+            current_symbol[current_symbol_length++] = src_str[i];
+            continue;
+        }
+
+        // Double minus just cancels them both out e.g. --2+2=4
+        if (current_symbol_length == 1 && current_symbol[0] == '-' &&
+            src_str[i] == '-') {
+            current_symbol_length = 0;
+            continue;
+        }
+
+        previous_symbol_was_closed_parenthesis = 0;
 
         // Is a letter => push to current, unless current starts with a number
         // then something has gone wrong
@@ -158,12 +178,14 @@ int str_to_symbols_postfix(char *src_str, SymbolQueue *output_queue) {
         // Try to parse a single character operator
         Symbol op = parse_operator(src_str[i]);
         if (op.symbol_type != SYMBOL_NULL) {
+            if (op.symbol_type == SYMBOL_PARENTHESIS_CLOSE)
+                previous_symbol_was_closed_parenthesis = 1;
 
             if (current_symbol_length > 0) {
                 // Ensure null-termination
                 current_symbol[current_symbol_length] = 0;
-                // Push numeric symbol to output
-                //  TODO: Fail if overflows instead of wrapping
+                // Push numeric literal to output
+                //  TODO: Check validity of numeric literal
                 Symbol numeric_literal = {.symbol_type = SYMBOL_LITERAL,
                                           .literal = strtod(current_symbol, 0)};
                 if (push_symbol_with_shunting_yard(

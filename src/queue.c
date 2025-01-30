@@ -29,15 +29,15 @@ void queue_free(SymbolQueue *queue) {
     queue->__size = 0;
 }
 
-// int stack_peek_from_top(SymbolStack *stack, int n, Symbol *out_symbol) {
-//     if (stack->__top - 1 < n || n < 0) {
-//         return 1;
-//     }
-//
-//     *out_symbol = stack->__array[stack->__top - 1 - n];
-//
-//     return 0;
-// }
+int queue_peek_from_back(SymbolQueue *stack, int n, Symbol *out_symbol) {
+    if (stack->__used - 1 < n || n < 0) {
+        return 1;
+    }
+
+    *out_symbol = stack->__array[stack->__used - 1 - n];
+
+    return 0;
+}
 
 int queue_dequeue(SymbolQueue *queue, Symbol *out_symbol) {
     if (queue->__used == 0 || queue->__start >= queue->__used) {

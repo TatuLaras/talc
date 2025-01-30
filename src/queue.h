@@ -31,6 +31,6 @@ int queue_dequeue(SymbolQueue *queue, Symbol *out_symbol);
 // Get the element n elements down from the end of the queue
 //
 // Returns 1 if n is out of bounds
-// int queue_peek_from_top(SymbolQueue *queue, int n, Symbol *out_symbol);
+int queue_peek_from_back(SymbolQueue *queue, int n, Symbol *out_symbol);
 
 #endif

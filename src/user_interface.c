@@ -21,8 +21,7 @@ static void ui_render_input_line(UserInterface *ui) {
 
     // Input buffer
     for (int i = 0; i < ui->input_buffer_used; i++) {
-        tb_set_cell(i, input_line_row, ui->input_buffer[i], TB_DEFAULT,
-                    TB_BLACK);
+        tb_set_cell(i, input_line_row, ui->input_buffer[i], TB_WHITE, TB_BLACK);
     }
 
     // Rest of the line (to get background color for the whole line)
@@ -71,7 +70,7 @@ static int ui_handle_keyboard_input(UserInterface *ui, char *out_expression) {
         return UI_CODE_INPUT_READY;
     }
 
-    if (event.key == TB_KEY_BACKSPACE2) {
+    if (event.key == TB_KEY_BACKSPACE2 || event.key == TB_KEY_BACKSPACE) {
         ui_erase_character(ui);
         return 0;
     }
