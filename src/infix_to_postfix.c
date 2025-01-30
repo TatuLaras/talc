@@ -127,18 +127,19 @@ int str_to_symbols_postfix(char *src_str, SymbolQueue *output_queue) {
 
     int current_symbol_length = 0;
 
-    int previous_symbol_was_closed_parenthesis = 0;
+    int previous_was_close_parenthesis = 0;
 
     // Iterate over string
     for (size_t i = 0; src_str[i] != 0; i++) {
+
         if (src_str[i] == ' ')
             continue;
 
         // If the first character in the current symbol is a '-', interpret it
         // as part of a new numeric literal, as opposed to the operator '-'
         // which is preceded by some numeric literal.
-        if (current_symbol_length == 0 &&
-            !previous_symbol_was_closed_parenthesis && src_str[i] == '-') {
+        if (current_symbol_length == 0 && !previous_was_close_parenthesis &&
+            src_str[i] == '-') {
             current_symbol[current_symbol_length++] = src_str[i];
             continue;
         }
@@ -150,7 +151,7 @@ int str_to_symbols_postfix(char *src_str, SymbolQueue *output_queue) {
             continue;
         }
 
-        previous_symbol_was_closed_parenthesis = 0;
+        previous_was_close_parenthesis = 0;
 
         // Is a letter => push to current, unless current starts with a number
         // then something has gone wrong
@@ -177,17 +178,21 @@ int str_to_symbols_postfix(char *src_str, SymbolQueue *output_queue) {
 
         // Try to parse a single character operator
         Symbol op = parse_operator(src_str[i]);
+
+        if (op.symbol_type == SYMBOL_PARENTHESIS_CLOSE)
+            previous_was_close_parenthesis = 1;
+
         if (op.symbol_type != SYMBOL_NULL) {
-            if (op.symbol_type == SYMBOL_PARENTHESIS_CLOSE)
-                previous_symbol_was_closed_parenthesis = 1;
 
             if (current_symbol_length > 0) {
                 // Ensure null-termination
                 current_symbol[current_symbol_length] = 0;
-                // Push numeric literal to output
+
+                // Push numeric literal
                 //  TODO: Check validity of numeric literal
                 Symbol numeric_literal = {.symbol_type = SYMBOL_LITERAL,
                                           .literal = strtod(current_symbol, 0)};
+
                 if (push_symbol_with_shunting_yard(
                         numeric_literal, output_queue, &holding_stack))
                     return 1;
@@ -195,10 +200,11 @@ int str_to_symbols_postfix(char *src_str, SymbolQueue *output_queue) {
                 current_symbol_length = 0;
             }
 
-            // Push operator to output
+            // Push operator
             if (push_symbol_with_shunting_yard(op, output_queue,
                                                &holding_stack))
                 return 1;
+
             continue;
         }
 
@@ -207,12 +213,8 @@ int str_to_symbols_postfix(char *src_str, SymbolQueue *output_queue) {
     }
 
     if (current_symbol_length > 0) {
-        // Ensure null-termination
         current_symbol[current_symbol_length] = 0;
 
-        //  TODO: could be a variable
-
-        // Push numeric symbol to output
         Symbol numeric_literal = {.symbol_type = SYMBOL_LITERAL,
                                   .literal = strtod(current_symbol, 0)};
 

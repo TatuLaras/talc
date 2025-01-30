@@ -1,8 +1,12 @@
 #  TODO: Make dynamic with https://www.throwtheswitch.org/build/make
 CC = gcc
-CFLAGS = -Wall -ggdb -lm
+CUSTOM_FLAGS = 
+CFLAGS = -Wall -ggdb -lm $(CUSTOM_FLAGS)
 
-all: test_stack test_infix_to_postfix test_queue test_double_stack test_calculate
+all: setup test_stack test_infix_to_postfix test_queue test_double_stack test_calculate
+
+setup:
+	@mkdir -p build
 
 test_double_stack: test_double_stack.c
 	$(CC) $(CFLAGS) -o build/test_double_stack test_double_stack.c  ../src/external/unity.c ../src/double_stack.c

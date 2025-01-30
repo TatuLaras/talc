@@ -17,7 +17,36 @@ Voit kääntää ja ajaa projektin samalla komennolla käyttämällä:
 $ make run
 ```
 
-Projektin yksikkötestit sijaitsevat projektin juuren `/tests` -kansiossa. Niiden kääntäminen ja ajaminen onnistuu samoilla komennoilla siten että projektin juuren sijaan olet `/tests` -kansiossa.
 
 ## Käyttöohjeet
 TBD
+
+## Testit
+Projektin yksikkötestit sijaitsevat projektin juuren `/tests` -kansiossa. Kääntääksesi kaikki testit voit käyttää `/tests` -kansiossa ollessasi:
+```bash
+$ make
+```
+tai ajaaksesi ne samalla:
+```bash
+$ make run
+```
+
+
+### Rivikattavuus
+Rivikattavuutta on mahdollista mitata `gcov` -työkalun avulla. Luodaksesi rivikattavuustiedot sisältävät tiedostot, testit on käännettävä käyttäen `gcc`-kääntäjän `--coverage` -asetusta, jonka jälkeen testiohjelmat ovat ajettava. Helpoimmin tämä onnistuu seuraavasti (`/tests/` -kansion juuressa):
+
+```bash
+$ make run CUSTOM_FLAGS=--coverage
+```
+
+Tämän jälkeen build-kansioon ilmestyy läjä `.gcno` -tiedostoja, jotka ovat nimetty seuraavan kaavan mukaan:
+```
+[ testitiedosto ]-[ mitä tiedostoa se ajaa ].gcno
+```
+
+Kyseisiä tiedostoja voi lukea `gcov` -ohjelmalla seuraavasti:
+```bash
+$ gcov [ tiedosto ]
+```
+
+Tämä tulostaa terminaaliin prosentuaalisen rivikattavuuden, sekä luo nykyiseen työkansioon `.gcov` -tiedoston, jossa kerrotaan mitä rivejä suoritettiin ja ei suoritettu.
