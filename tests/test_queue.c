@@ -25,12 +25,12 @@ void test_queue_should_contain_pushed_values() {
     int8_t values[6] = {12, 23, 34, 45, 56, 230};
 
     for (int i = 0; i < 6; i++) {
-        Symbol symbol = {.symbol_type = values[i]};
+        Symbol symbol = {.type = values[i]};
         queue_enqueue(&queue, symbol);
     }
 
     for (int i = 0; i < 6; i++) {
-        TEST_ASSERT_EQUAL(values[i], queue.__array[i].symbol_type);
+        TEST_ASSERT_EQUAL(values[i], queue.__array[i].type);
     }
 }
 
@@ -38,14 +38,14 @@ void test_queue_dequeueing_works() {
     int8_t values[6] = {12, 23, 34, 45, 56, 230};
 
     for (int i = 0; i < 6; i++) {
-        Symbol symbol = {.symbol_type = values[i]};
+        Symbol symbol = {.type = values[i]};
         queue_enqueue(&queue, symbol);
     }
 
     for (int i = 0; i < 6; i++) {
         Symbol out_symbol = {0};
         TEST_ASSERT_FALSE(queue_dequeue(&queue, &out_symbol));
-        TEST_ASSERT_EQUAL(values[i], out_symbol.symbol_type);
+        TEST_ASSERT_EQUAL(values[i], out_symbol.type);
     }
 
     TEST_ASSERT_EQUAL(queue.__used, queue.__start);
@@ -55,7 +55,7 @@ void test_over_dequeing_should_fail() {
     int8_t values[3] = {12, 23, 34};
 
     for (int i = 0; i < 3; i++) {
-        Symbol symbol = {.symbol_type = values[i]};
+        Symbol symbol = {.type = values[i]};
         queue_enqueue(&queue, symbol);
     }
 
@@ -73,21 +73,21 @@ void test_out_of_bounds_value_should_fail() {
     int values[6] = {12, 23, 34, 45, 56, 9922};
 
     for (int i = 0; i < 6; i++) {
-        Symbol symbol = {.symbol_type = values[i]};
+        Symbol symbol = {.type = values[i]};
         queue_enqueue(&queue, symbol);
     }
 
     Symbol out_symbol = {0};
     queue_peek_from_back(&queue, 2, &out_symbol);
-    TEST_ASSERT_EQUAL(45, out_symbol.symbol_type);
+    TEST_ASSERT_EQUAL(45, out_symbol.type);
 
     // These two should not affect the out_symbol variable
     //   and should return 1 indicating an error
     TEST_ASSERT(queue_peek_from_back(&queue, 6, &out_symbol));
-    TEST_ASSERT_EQUAL(45, out_symbol.symbol_type);
+    TEST_ASSERT_EQUAL(45, out_symbol.type);
 
     TEST_ASSERT(queue_peek_from_back(&queue, -1, &out_symbol));
-    TEST_ASSERT_EQUAL(45, out_symbol.symbol_type);
+    TEST_ASSERT_EQUAL(45, out_symbol.type);
 }
 
 int main() {

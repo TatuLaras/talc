@@ -12,16 +12,16 @@ test_double_stack: test_double_stack.c
 	$(CC) $(CFLAGS) -o build/test_double_stack test_double_stack.c  ../src/external/unity.c ../src/double_stack.c
 
 test_stack: test_stack.c
-	$(CC) $(CFLAGS) -o build/test_stack test_stack.c  ../src/external/unity.c ../src/symbol_stack.c
+	$(CC) $(CFLAGS) -o build/test_stack test_stack.c  ../src/external/unity.c ../src/symbol_stack.c 
 
 test_infix_to_postfix: test_infix_to_postfix.c
-	$(CC) $(CFLAGS) -o build/test_infix_to_postfix test_infix_to_postfix.c  ../src/external/unity.c ../src/infix_to_postfix.c ../src/symbol_stack.c ../src/queue.c
+	$(CC) $(CFLAGS) -o build/test_infix_to_postfix test_infix_to_postfix.c  ../src/external/unity.c ../src/infix_to_postfix.c ../src/symbol_stack.c ../src/queue.c ../src/symbol.c
 
 test_queue: test_queue.c
 	$(CC) $(CFLAGS) -o build/test_queue test_queue.c  ../src/external/unity.c ../src/queue.c ../src/symbol_stack.c
 
 test_calculate: test_calculate.c
-	$(CC) $(CFLAGS) -o build/test_calculate test_calculate.c  ../src/external/unity.c ../src/calculate.c ../src/symbol_stack.c ../src/double_stack.c ../src/queue.c ../src/infix_to_postfix.c
+	$(CC) $(CFLAGS) -o build/test_calculate test_calculate.c  ../src/external/unity.c ../src/calculate.c ../src/symbol_stack.c ../src/double_stack.c ../src/queue.c ../src/infix_to_postfix.c ../src/symbol.c
 
 run: all
 	build/test_stack

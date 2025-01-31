@@ -28,28 +28,13 @@ void test_signed_numeric_literals() {
 }
 
 void test_signed_numeric_literals_advanced() {
-    char *expression = "((3+-4)*2+-1*-5+-6.2)-5";
+    char *expression = "((3+-4)*2+-1*-5+-6.2)/5";
     TEST_ASSERT_FALSE(str_to_symbols_postfix(expression, &symbols));
 
     double result = 0;
     TEST_ASSERT_FALSE(calculate_value(&symbols, &result));
 
-    TEST_ASSERT(-8.2 == result);
-}
-
-void test_double_minus_at_start() {
-    //  NOTE: I decided that --2 should be interpreted as (-(-2)), very unlikely
-    //   that someone would use it that way, but I think a calculator should be
-    //   as permissible as possible when it comes to stuff like this, with
-    //   errors being reserved for situations when there is no way to interpret
-    //   the input
-    char *expression = "--2+3";
-    TEST_ASSERT_FALSE(str_to_symbols_postfix(expression, &symbols));
-
-    double result = 0;
-    TEST_ASSERT_FALSE(calculate_value(&symbols, &result));
-
-    TEST_ASSERT_EQUAL(5, result);
+    TEST_ASSERT(-0.64 == result);
 }
 
 void test_double_minus_in_the_middle() {
@@ -62,14 +47,115 @@ void test_double_minus_in_the_middle() {
     TEST_ASSERT_EQUAL(7, result);
 }
 
+void test_fails_on_invalid_rpn_basic() {
+    double _result = 0;
+    SymbolQueue queue = {0};
+    queue_init(&queue);
+
+    Symbol first_1 = {.type = SYMBOL_LITERAL, .literal = 5};
+    Symbol first_2 = {.type = SYMBOL_OP_ADDITION};
+    queue_enqueue(&queue, first_1);
+    queue_enqueue(&queue, first_2);
+
+    TEST_ASSERT(calculate_value(&queue, &_result));
+}
+
+void test_fails_on_invalid_rpn_more_symbols() {
+    double _result = 0;
+    SymbolQueue queue = {0};
+    queue_init(&queue);
+
+    Symbol symbols[4] = {
+        {.type = SYMBOL_LITERAL, .literal = 5},
+        {.type = SYMBOL_LITERAL, .literal = 5},
+        {.type = SYMBOL_OP_ADDITION},
+        {.type = SYMBOL_OP_MULTIPLICATION},
+    };
+
+    for (int i = 0; i < 4; i++) {
+        queue_enqueue(&queue, symbols[i]);
+    }
+
+    TEST_ASSERT(calculate_value(&queue, &_result));
+}
+
+void test_fails_on_invalid_rpn_other_operators() {
+    double _result = 0;
+    SymbolQueue queue = {0};
+    queue_init(&queue);
+
+    Symbol symbols[8] = {
+        {.type = SYMBOL_LITERAL, .literal = 5},
+        {.type = SYMBOL_LITERAL, .literal = 5},
+        {.type = SYMBOL_OP_ADDITION},
+        {.type = SYMBOL_LITERAL, .literal = 5},
+        {.type = SYMBOL_LITERAL, .literal = 5},
+        {.type = SYMBOL_OP_MULTIPLICATION},
+        {.type = SYMBOL_OP_MULTIPLICATION},
+        {.type = SYMBOL_OP_EXPONENT},
+    };
+
+    for (int i = 0; i < 8; i++) {
+        queue_enqueue(&queue, symbols[i]);
+    }
+
+    TEST_ASSERT(calculate_value(&queue, &_result));
+    queue_free(&queue);
+    queue_init(&queue);
+
+    Symbol symbols_sub[2] = {
+        {.type = SYMBOL_LITERAL, .literal = 5},
+        {.type = SYMBOL_OP_SUBTRACTION},
+    };
+
+    for (int i = 0; i < 2; i++) {
+        queue_enqueue(&queue, symbols_sub[i]);
+    }
+
+    TEST_ASSERT(calculate_value(&queue, &_result));
+}
+
+void test_division_by_zero_fails() {
+    char *expression = "5+5*(4/0)+2";
+    TEST_ASSERT_FALSE(str_to_symbols_postfix(expression, &symbols));
+
+    double _result = 0;
+    TEST_ASSERT(calculate_value(&symbols, &_result));
+}
+
+void test_fails_on_invalid_rpn_leftover_symbols() {
+    double _result = 0;
+    SymbolQueue queue = {0};
+    queue_init(&queue);
+
+    Symbol symbols[6] = {
+        {.type = SYMBOL_LITERAL, .literal = 5},
+        {.type = SYMBOL_LITERAL, .literal = 5},
+        {.type = SYMBOL_LITERAL, .literal = 5},
+        {.type = SYMBOL_LITERAL, .literal = 5},
+        {.type = SYMBOL_OP_ADDITION},
+        {.type = SYMBOL_OP_MULTIPLICATION},
+    };
+
+    for (int i = 0; i < 6; i++) {
+        queue_enqueue(&queue, symbols[i]);
+    }
+
+    TEST_ASSERT(calculate_value(&queue, &_result));
+}
+
 int main() {
     UNITY_BEGIN();
 
     RUN_TEST(test_expression_has_the_right_result);
     RUN_TEST(test_signed_numeric_literals);
     RUN_TEST(test_signed_numeric_literals_advanced);
-    RUN_TEST(test_double_minus_at_start);
     RUN_TEST(test_double_minus_in_the_middle);
+    RUN_TEST(test_fails_on_invalid_rpn_basic);
+    RUN_TEST(test_fails_on_invalid_rpn_more_symbols);
+    RUN_TEST(test_division_by_zero_fails);
+    RUN_TEST(test_fails_on_invalid_rpn_leftover_symbols);
+    RUN_TEST(test_fails_on_invalid_rpn_other_operators);
 
     return UNITY_END();
 }

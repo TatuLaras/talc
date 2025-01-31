@@ -29,13 +29,13 @@ void test_does_not_fail_with_matching_parenthesis() {
 
     int i = 0;
 
-    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].type);
     TEST_ASSERT_EQUAL(15, symbols.__array[i].literal);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].type);
     TEST_ASSERT_EQUAL(9, symbols.__array[i].literal);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_OP_ADDITION, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_OP_ADDITION, symbols.__array[i].type);
 }
 
 void test_converts_correctly_basic_operations_with_integers() {
@@ -48,36 +48,36 @@ void test_converts_correctly_basic_operations_with_integers() {
 
     int i = 0;
 
-    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].type);
     TEST_ASSERT_EQUAL(15, symbols.__array[i].literal);
     i++;
 
-    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].type);
     TEST_ASSERT_EQUAL(540, symbols.__array[i].literal);
     i++;
 
-    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].type);
     TEST_ASSERT_EQUAL(3, symbols.__array[i].literal);
     i++;
 
-    TEST_ASSERT_EQUAL(SYMBOL_OP_DIVISION, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_OP_DIVISION, symbols.__array[i].type);
     i++;
 
-    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].type);
     TEST_ASSERT_EQUAL(100001, symbols.__array[i].literal);
     i++;
 
-    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].type);
     TEST_ASSERT_EQUAL(2, symbols.__array[i].literal);
     i++;
 
-    TEST_ASSERT_EQUAL(SYMBOL_OP_EXPONENT, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_OP_EXPONENT, symbols.__array[i].type);
     i++;
 
-    TEST_ASSERT_EQUAL(SYMBOL_OP_MULTIPLICATION, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_OP_MULTIPLICATION, symbols.__array[i].type);
     i++;
 
-    TEST_ASSERT_EQUAL(SYMBOL_OP_ADDITION, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_OP_ADDITION, symbols.__array[i].type);
 }
 
 void test_converts_correctly_parenthesis() {
@@ -88,33 +88,33 @@ void test_converts_correctly_parenthesis() {
 
     int i = 0;
     // --
-    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].type);
     TEST_ASSERT_EQUAL(5, symbols.__array[i].literal);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].type);
     TEST_ASSERT_EQUAL(3, symbols.__array[i].literal);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_OP_ADDITION, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_OP_ADDITION, symbols.__array[i].type);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].type);
     TEST_ASSERT_EQUAL(12, symbols.__array[i].literal);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].type);
     TEST_ASSERT_EQUAL(4, symbols.__array[i].literal);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_OP_DIVISION, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_OP_DIVISION, symbols.__array[i].type);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_OP_MULTIPLICATION, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_OP_MULTIPLICATION, symbols.__array[i].type);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].type);
     TEST_ASSERT_EQUAL(7, symbols.__array[i].literal);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].type);
     TEST_ASSERT_EQUAL(2, symbols.__array[i].literal);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_OP_EXPONENT, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_OP_EXPONENT, symbols.__array[i].type);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_OP_SUBTRACTION, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_OP_SUBTRACTION, symbols.__array[i].type);
 }
 
 void test_coverts_correctly_decimal_literals() {
@@ -126,33 +126,33 @@ void test_coverts_correctly_decimal_literals() {
 
     int i = 0;
 
-    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].type);
     TEST_ASSERT_EQUAL(6, symbols.__array[i].literal);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].type);
     TEST_ASSERT_EQUAL(3.5, symbols.__array[i].literal);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_OP_ADDITION, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_OP_ADDITION, symbols.__array[i].type);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].type);
     TEST_ASSERT_EQUAL(2.6, symbols.__array[i].literal);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].type);
     TEST_ASSERT_EQUAL(3.123, symbols.__array[i].literal);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_OP_EXPONENT, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_OP_EXPONENT, symbols.__array[i].type);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_OP_MULTIPLICATION, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_OP_MULTIPLICATION, symbols.__array[i].type);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].type);
     TEST_ASSERT_EQUAL(9, symbols.__array[i].literal);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].type);
     TEST_ASSERT_EQUAL(3, symbols.__array[i].literal);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_OP_DIVISION, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_OP_DIVISION, symbols.__array[i].type);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_OP_SUBTRACTION, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_OP_SUBTRACTION, symbols.__array[i].type);
 }
 
 void test_coverts_correctly_nested_parenthesis() {
@@ -164,43 +164,43 @@ void test_coverts_correctly_nested_parenthesis() {
 
     int i = 0;
 
-    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].type);
     TEST_ASSERT_EQUAL(5, symbols.__array[i].literal);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].type);
     TEST_ASSERT_EQUAL(2, symbols.__array[i].literal);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_OP_EXPONENT, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_OP_EXPONENT, symbols.__array[i].type);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].type);
     TEST_ASSERT_EQUAL(5, symbols.__array[i].literal);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].type);
     TEST_ASSERT_EQUAL(5, symbols.__array[i].literal);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].type);
     TEST_ASSERT_EQUAL(2, symbols.__array[i].literal);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_OP_ADDITION, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_OP_ADDITION, symbols.__array[i].type);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_OP_MULTIPLICATION, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_OP_MULTIPLICATION, symbols.__array[i].type);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].type);
     TEST_ASSERT_EQUAL(2, symbols.__array[i].literal);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].type);
     TEST_ASSERT_EQUAL(3, symbols.__array[i].literal);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_OP_ADDITION, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_OP_ADDITION, symbols.__array[i].type);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_OP_DIVISION, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_OP_DIVISION, symbols.__array[i].type);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_OP_ADDITION, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_OP_ADDITION, symbols.__array[i].type);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].type);
     TEST_ASSERT_EQUAL(4, symbols.__array[i].literal);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_OP_SUBTRACTION, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_OP_SUBTRACTION, symbols.__array[i].type);
     i++;
 }
 
@@ -213,23 +213,90 @@ void test_signed_numeric_literals() {
 
     int i = 0;
 
-    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].type);
     TEST_ASSERT_EQUAL(-5, symbols.__array[i].literal);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].type);
     TEST_ASSERT_EQUAL(2, symbols.__array[i].literal);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_OP_SUBTRACTION, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_OP_SUBTRACTION, symbols.__array[i].type);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].type);
     TEST_ASSERT_EQUAL(3, symbols.__array[i].literal);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_OP_ADDITION, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_OP_ADDITION, symbols.__array[i].type);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].type);
     TEST_ASSERT_EQUAL(-2, symbols.__array[i].literal);
     i++;
-    TEST_ASSERT_EQUAL(SYMBOL_OP_ADDITION, symbols.__array[i].symbol_type);
+    TEST_ASSERT_EQUAL(SYMBOL_OP_ADDITION, symbols.__array[i].type);
+}
+
+void test_double_minus_at_start() {
+    //  NOTE: I decided that --2 should be interpreted as (-(-2)), very unlikely
+    //   that someone would use it that way, but I think a calculator should be
+    //   as permissible as possible when it comes to stuff like this, with
+    //   errors being reserved for situations when there is no way to interpret
+    //   the input
+    char *expression = "--2+3";
+    // RPN: 2 3 +
+    TEST_ASSERT_FALSE(str_to_symbols_postfix(expression, &symbols));
+    TEST_ASSERT_EQUAL(3, symbols.__used);
+
+    int i = 0;
+
+    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].type);
+    TEST_ASSERT_EQUAL(2, symbols.__array[i].literal);
+    i++;
+    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].type);
+    TEST_ASSERT_EQUAL(3, symbols.__array[i].literal);
+    i++;
+    TEST_ASSERT_EQUAL(SYMBOL_OP_ADDITION, symbols.__array[i].type);
+}
+
+void test_number_with_letters_in_it_fails() {
+    char *expression = "15+12a3";
+    TEST_ASSERT(str_to_symbols_postfix(expression, &symbols));
+}
+
+void test_using_a_variable_does_not_fail() {
+    char *expression = "15+abcd123";
+    TEST_ASSERT_FALSE(str_to_symbols_postfix(expression, &symbols));
+}
+
+void test_variable_with_dots_in_it_fails() {
+    char *expression = "15+abc.def";
+    TEST_ASSERT(str_to_symbols_postfix(expression, &symbols));
+}
+
+void test_using_functions() {
+    char *expression = " sin ( max ( 2, 3 ) / 3 * 9 ) ";
+    // Correct RPN: 2 3 max 3 / 9 * sin
+
+    TEST_ASSERT_FALSE(str_to_symbols_postfix(expression, &symbols));
+    TEST_ASSERT_EQUAL(8, symbols.__used);
+
+    int i = 0;
+
+    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].type);
+    TEST_ASSERT_EQUAL(2, symbols.__array[i].literal);
+    i++;
+    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].type);
+    TEST_ASSERT_EQUAL(3, symbols.__array[i].literal);
+    i++;
+    TEST_ASSERT_EQUAL(SYMBOL_FUNC_MAX, symbols.__array[i].type);
+    i++;
+    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].type);
+    TEST_ASSERT_EQUAL(3, symbols.__array[i].literal);
+    i++;
+    TEST_ASSERT_EQUAL(SYMBOL_OP_DIVISION, symbols.__array[i].type);
+    i++;
+    TEST_ASSERT_EQUAL(SYMBOL_LITERAL, symbols.__array[i].type);
+    TEST_ASSERT_EQUAL(9, symbols.__array[i].literal);
+    i++;
+    TEST_ASSERT_EQUAL(SYMBOL_OP_MULTIPLICATION, symbols.__array[i].type);
+    i++;
+    TEST_ASSERT_EQUAL(SYMBOL_FUNC_SIN, symbols.__array[i].type);
     i++;
 }
 
@@ -245,6 +312,11 @@ int main() {
     RUN_TEST(test_does_not_fail_with_matching_parenthesis);
     RUN_TEST(test_coverts_correctly_nested_parenthesis);
     RUN_TEST(test_signed_numeric_literals);
+    RUN_TEST(test_double_minus_at_start);
+    RUN_TEST(test_number_with_letters_in_it_fails);
+    RUN_TEST(test_using_a_variable_does_not_fail);
+    RUN_TEST(test_variable_with_dots_in_it_fails);
+    RUN_TEST(test_using_functions);
 
     return UNITY_END();
 }
