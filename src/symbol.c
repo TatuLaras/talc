@@ -94,7 +94,7 @@ Symbol parse_non_operator_symbol(char *str, int is_function) {
     return numeric_literal;
 }
 
-inline int num_operands(Symbol *symbol) {
+int num_operands(Symbol *symbol) {
     switch (symbol->type) {
     case SYMBOL_OP_ADDITION:
         return 2;

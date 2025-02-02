@@ -24,14 +24,19 @@ int main() {
             SymbolQueue rpn = {0};
             queue_init(&rpn);
 
-            if (str_to_symbols_postfix(input_expression, &rpn))
+            if (str_to_symbols_postfix(input_expression, &rpn)) {
+                ui.is_error = 1;
                 continue;
+            }
 
             Result result = {0};
-            // TODO: error to the user
-            if (calculate_value(&rpn, &result.result))
-                continue;
 
+            if (calculate_value(&rpn, &result.result)) {
+                ui.is_error = 1;
+                continue;
+            }
+
+            ui.is_error = 0;
             ui_append_result(&ui, result);
         }
     }

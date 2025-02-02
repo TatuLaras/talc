@@ -18,6 +18,7 @@ typedef struct {
     int input_buffer_used;
     int input_buffer_cursor;
     ResultsBuffer results;
+    int is_error;
 } UserInterface;
 
 // Initializes the necessary internal buffers.

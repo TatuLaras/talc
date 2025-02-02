@@ -17,17 +17,25 @@ static void ui_reset_input(UserInterface *ui) {
 
 // Renders the current input buffer as an input line in the bottom of the TUI
 static void ui_render_input_line(UserInterface *ui) {
-    int input_line_row = tb_height() - 1;
+    int row = tb_height() - 1;
 
     // Input buffer
     for (int i = 0; i < ui->input_buffer_used; i++) {
-        tb_set_cell(i, input_line_row, ui->input_buffer[i], TB_WHITE, TB_BLACK);
+        tb_set_cell(i, row, ui->input_buffer[i], TB_BLACK, TB_WHITE);
     }
 
     // Rest of the line (to get background color for the whole line)
     for (int i = ui->input_buffer_used; i < tb_width(); i++) {
-        tb_set_cell(i, input_line_row, ' ', TB_DEFAULT, TB_BLACK);
+        tb_set_cell(i, row, ' ', TB_BLACK, TB_WHITE);
     }
+}
+
+// Renders a "status line" above the input line
+static void ui_render_status_line(UserInterface *ui) {
+    int row = tb_height() - 2;
+
+    if (ui->is_error)
+        tb_printf(0, row, TB_WHITE, TB_RED, " ERROR ");
 }
 
 // Renders the contents of the results buffer onto the TUI
@@ -39,7 +47,7 @@ static void ui_render_results(UserInterface *ui) {
     while (!results_buffer_get_latest(&ui->results, i, &result)) {
         i++;
 
-        tb_printf(2, line--, TB_DEFAULT, TB_DEFAULT, "$%d  %lg", i,
+        tb_printf(1, line--, TB_DEFAULT, TB_DEFAULT, "$%d  %lg", i,
                   result.result);
     }
 }
@@ -84,9 +92,12 @@ static void ui_render(UserInterface *ui) {
     tb_clear();
 
     tb_set_cursor(ui->input_buffer_cursor, tb_height());
-    tb_printf(2, 1, TB_CYAN, 0, "width=%d height=%d", tb_width(), tb_height());
+
+    if (ui->results.__total == 0)
+        tb_printf(2, 1, TB_CYAN, 0, "ctrl+q to quit");
 
     ui_render_input_line(ui);
+    ui_render_status_line(ui);
     ui_render_results(ui);
 
     tb_present();

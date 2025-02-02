@@ -300,6 +300,9 @@ void test_using_functions() {
     i++;
 }
 
+//  TODO: -(-2)+3
+//  TODO: 3-(-(-2))
+
 int main() {
     UNITY_BEGIN();
 
