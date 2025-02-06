@@ -11,7 +11,7 @@ typedef struct {
 typedef struct {
     Result __data[RESULTS_BUFFER_SIZE];
     int __current;
-    int __total;
+    int count;
 } ResultsBuffer;
 
 // Appends a new result into the result buffer

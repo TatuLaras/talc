@@ -37,6 +37,19 @@ void test_signed_numeric_literals_advanced() {
     TEST_ASSERT(-0.64 == result);
 }
 
+void test_fails_on_function_with_wrong_number_of_params() {
+    char *expression = "3+min(1)+4";
+    TEST_ASSERT_FALSE(str_to_symbols_postfix(expression, &symbols));
+
+    double result = 0;
+    TEST_ASSERT_TRUE(calculate_value(&symbols, &result));
+}
+
+void test_fails_on_undefined_function() {
+    char *expression = "3+notdefined(1)+4";
+    TEST_ASSERT_TRUE(str_to_symbols_postfix(expression, &symbols));
+}
+
 void test_double_minus_in_the_middle() {
     char *expression = "5--2";
     TEST_ASSERT_FALSE(str_to_symbols_postfix(expression, &symbols));
@@ -156,6 +169,8 @@ int main() {
     RUN_TEST(test_division_by_zero_fails);
     RUN_TEST(test_fails_on_invalid_rpn_leftover_symbols);
     RUN_TEST(test_fails_on_invalid_rpn_other_operators);
+    RUN_TEST(test_fails_on_function_with_wrong_number_of_params);
+    RUN_TEST(test_fails_on_undefined_function);
 
     return UNITY_END();
 }

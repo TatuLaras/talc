@@ -43,12 +43,13 @@ static void ui_render_results(UserInterface *ui) {
     int line = tb_height() - 3;
     int i = 0;
 
-    Result result = {.expression = "2+2"};
+    Result result = {0};
     while (!results_buffer_get_latest(&ui->results, i, &result)) {
         i++;
 
-        tb_printf(1, line--, TB_DEFAULT, TB_DEFAULT, "$%d  %lg", i,
-                  result.result);
+        tb_printf(1, line--, TB_DEFAULT, TB_DEFAULT, " = %lg", result.result);
+        tb_printf(1, line--, TB_DEFAULT, TB_DEFAULT, result.expression);
+        line--;
     }
 }
 
@@ -93,7 +94,7 @@ static void ui_render(UserInterface *ui) {
 
     tb_set_cursor(ui->input_buffer_cursor, tb_height());
 
-    if (ui->results.__total == 0)
+    if (ui->results.count == 0)
         tb_printf(2, 1, TB_CYAN, 0, "ctrl+q to quit");
 
     ui_render_input_line(ui);

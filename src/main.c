@@ -5,6 +5,7 @@
 #include "infix_to_postfix.h"
 #include "results_buffer.h"
 #include "user_interface.h"
+#include <string.h>
 
 int main() {
 
@@ -35,6 +36,9 @@ int main() {
                 ui.is_error = 1;
                 continue;
             }
+
+            result.expression = malloc(strlen(input_expression) * sizeof(char));
+            strcpy(result.expression, input_expression);
 
             ui.is_error = 0;
             ui_append_result(&ui, result);
