@@ -15,10 +15,12 @@
 #define INFIX_ERROR_GENERAL 1
 #define INFIX_ERROR_MISMATCHED_PARENTHESIS 2
 #define INFIX_ERROR_MALFORMED_INPUT 3
+#define INFIX_ERROR_INVALID_VARIABLE_ASSIGNMENT 4
 
 // Attempts to covert a string expression in src_str to postfix / RPN form,
 // returns 1 on failure due to an invalid source expression.
-int infix_to_postfix(char *src_str, SymbolQueue *output_queue,
-                     VariableStorage *variables);
+int infix_to_postfix(char *src_str, VariableStorage *variables,
+                     SymbolQueue *out_queue,
+                     VariableAssignmentRequest *out_variable_request);
 
 #endif

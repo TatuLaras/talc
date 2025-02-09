@@ -26,6 +26,7 @@ int main() {
 
         if (code == UI_CODE_INPUT_READY) {
             SymbolQueue rpn = {0};
+            VariableAssignmentRequest variable_assignment_request = {0};
             queue_init(&rpn);
 
             // Initialize a Result object to store the result in
@@ -34,7 +35,8 @@ int main() {
             strcpy(result.expression, input_expression);
 
             // Convert to reverse polish notation
-            if (infix_to_postfix(input_expression, &rpn, &variables)) {
+            if (infix_to_postfix(input_expression, &variables, &rpn,
+                                 &variable_assignment_request)) {
                 result.erroneous = 1;
                 ui.erroneus = 1;
                 ui_append_result(&ui, result);
@@ -45,8 +47,14 @@ int main() {
             if (calculate_value(&rpn, &result.result)) {
                 result.erroneous = 1;
                 ui.erroneus = 1;
-            } else
+            } else {
                 ui.erroneus = 0;
+                variables_fullfill_assignment_request(
+                    &variables, &variable_assignment_request, result.result);
+
+                // Also store result into 'ans' variable
+                variables_assign(&variables, "ans", result.result);
+            }
 
             ui_append_result(&ui, result);
         }

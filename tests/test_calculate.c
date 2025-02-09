@@ -3,6 +3,7 @@
 
 static SymbolQueue symbols = {0};
 static VariableStorage variables = {0};
+static VariableAssignmentRequest null_request = {0};
 
 void setUp() {
     queue_init(&symbols);
@@ -16,7 +17,8 @@ void tearDown() {
 
 void test_expression_has_the_right_result() {
     char *expression = "((((100*(10+3))^(2)))+1.123)";
-    TEST_ASSERT_FALSE(infix_to_postfix(expression, &symbols, &variables));
+    TEST_ASSERT_FALSE(
+        infix_to_postfix(expression, &variables, &symbols, &null_request));
 
     double result = 0;
     TEST_ASSERT_FALSE(calculate_value(&symbols, &result));
@@ -26,7 +28,8 @@ void test_expression_has_the_right_result() {
 
 void test_signed_numeric_literals() {
     char *expression = "-5-2+3+-2";
-    TEST_ASSERT_FALSE(infix_to_postfix(expression, &symbols, &variables));
+    TEST_ASSERT_FALSE(
+        infix_to_postfix(expression, &variables, &symbols, &null_request));
 
     double result = 0;
     TEST_ASSERT_FALSE(calculate_value(&symbols, &result));
@@ -36,7 +39,8 @@ void test_signed_numeric_literals() {
 
 void test_signed_numeric_literals_advanced() {
     char *expression = "((3+-4)*2+-1*-5+-6.2)/5";
-    TEST_ASSERT_FALSE(infix_to_postfix(expression, &symbols, &variables));
+    TEST_ASSERT_FALSE(
+        infix_to_postfix(expression, &variables, &symbols, &null_request));
 
     double result = 0;
     TEST_ASSERT_FALSE(calculate_value(&symbols, &result));
@@ -46,7 +50,8 @@ void test_signed_numeric_literals_advanced() {
 
 void test_fails_on_function_with_wrong_number_of_params() {
     char *expression = "3+min(1)+4";
-    TEST_ASSERT_FALSE(infix_to_postfix(expression, &symbols, &variables));
+    TEST_ASSERT_FALSE(
+        infix_to_postfix(expression, &variables, &symbols, &null_request));
 
     double result = 0;
     TEST_ASSERT_TRUE(calculate_value(&symbols, &result));
@@ -54,12 +59,14 @@ void test_fails_on_function_with_wrong_number_of_params() {
 
 void test_fails_on_undefined_function() {
     char *expression = "3+notdefined(1)+4";
-    TEST_ASSERT_TRUE(infix_to_postfix(expression, &symbols, &variables));
+    TEST_ASSERT_TRUE(
+        infix_to_postfix(expression, &variables, &symbols, &null_request));
 }
 
 void test_double_minus_in_the_middle() {
     char *expression = "5--2";
-    TEST_ASSERT_FALSE(infix_to_postfix(expression, &symbols, &variables));
+    TEST_ASSERT_FALSE(
+        infix_to_postfix(expression, &variables, &symbols, &null_request));
 
     double result = 0;
     TEST_ASSERT_FALSE(calculate_value(&symbols, &result));
@@ -137,7 +144,8 @@ void test_fails_on_invalid_rpn_other_operators() {
 
 void test_division_by_zero_fails() {
     char *expression = "5+5*(4/0)+2";
-    TEST_ASSERT_FALSE(infix_to_postfix(expression, &symbols, &variables));
+    TEST_ASSERT_FALSE(
+        infix_to_postfix(expression, &variables, &symbols, &null_request));
 
     double _result = 0;
     TEST_ASSERT(calculate_value(&symbols, &_result));

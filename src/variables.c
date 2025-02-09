@@ -22,7 +22,8 @@ void variables_free(VariableStorage *var) {
 }
 
 void variables_assign(VariableStorage *var, char *name, double value) {
-    Variable variable = {.name = name, .value = value};
+    Variable variable = {.value = value};
+    strncpy(variable.name, name, VARIABLES_NAME_MAX_LENGTH);
 
     if (var->__top == var->__size) {
         var->__size *= 2;
@@ -31,6 +32,12 @@ void variables_assign(VariableStorage *var, char *name, double value) {
     }
 
     var->__array[var->__top++] = variable;
+}
+
+void variables_fullfill_assignment_request(VariableStorage *var,
+                                           VariableAssignmentRequest *request,
+                                           double value) {
+    variables_assign(var, request->name, value);
 }
 
 int variables_retrieve(VariableStorage *var, char *name, double *out_value) {

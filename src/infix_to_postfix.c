@@ -1,4 +1,5 @@
 #include "infix_to_postfix.h"
+#include <string.h>
 
 static int push_symbol_with_shunting_yard(Symbol symbol,
                                           SymbolQueue *output_queue,
@@ -51,8 +52,8 @@ static int push_symbol_with_shunting_yard(Symbol symbol,
     return 0;
 }
 
-int drain_holding_stack_into_output(SymbolQueue *output_queue,
-                                    SymbolStack *holding_stack) {
+static int drain_holding_stack_into_output(SymbolQueue *output_queue,
+                                           SymbolStack *holding_stack) {
     Symbol out_symbol = {0};
     while (!stack_pop(holding_stack, &out_symbol)) {
         if (out_symbol.type == SYMBOL_PARENTHESIS_OPEN ||
@@ -65,8 +66,10 @@ int drain_holding_stack_into_output(SymbolQueue *output_queue,
     return 0;
 }
 
-int infix_to_postfix(char *src_str, SymbolQueue *output_queue,
-                     VariableStorage *variables) {
+int infix_to_postfix(char *src_str, VariableStorage *variables,
+                     SymbolQueue *out_queue,
+                     VariableAssignmentRequest *out_variable_request) {
+
     SymbolStack holding_stack = {0};
     stack_init(&holding_stack);
 
@@ -107,7 +110,10 @@ int infix_to_postfix(char *src_str, SymbolQueue *output_queue,
         // Is a letter => push to current, unless current starts with a number
         // then something has gone wrong
         if (isalpha(src_str[i])) {
-            if (current_symbol_length > 0 && isdigit(current_symbol[0]))
+            int current_is_literal =
+                current_symbol_length > 0 && isdigit(current_symbol[0]);
+
+            if (current_is_literal)
                 return INFIX_ERROR_MALFORMED_INPUT;
 
             current_symbol[current_symbol_length++] = src_str[i];
@@ -121,15 +127,42 @@ int infix_to_postfix(char *src_str, SymbolQueue *output_queue,
         }
 
         if (src_str[i] == '.') {
-            if (current_symbol_length > 0 && isalpha(current_symbol[0]))
+            int current_is_variable_name =
+                current_symbol_length > 0 && isalpha(current_symbol[0]);
+
+            if (current_is_variable_name)
                 return INFIX_ERROR_MALFORMED_INPUT;
+
             current_symbol[current_symbol_length++] = src_str[i];
+            continue;
+        }
+
+        // Variable assignment
+        if (src_str[i] == '=') {
+            int invalid_assignment =
+                current_symbol_length == 0 ||
+                current_symbol_length >= VARIABLES_NAME_MAX_LENGTH ||
+                !isalpha(current_symbol[0]) || out_queue->__used > 0 ||
+                holding_stack.__top > 0 || out_variable_request->valid;
+
+            if (invalid_assignment)
+                return INFIX_ERROR_INVALID_VARIABLE_ASSIGNMENT;
+
+            out_variable_request->valid = 1;
+
+            current_symbol[current_symbol_length] = 0;
+
+            strncpy(out_variable_request->name, current_symbol,
+                    current_symbol_length);
+
+            current_symbol_length = 0;
             continue;
         }
 
         // Try to parse a single character operator
         Symbol op = parse_operator(src_str[i]);
 
+        // SYMBOL_NULL is returned to indicate error
         if (op.type == SYMBOL_NULL)
             return INFIX_ERROR_GENERAL;
 
@@ -148,8 +181,7 @@ int infix_to_postfix(char *src_str, SymbolQueue *output_queue,
             if (symbol.type == SYMBOL_NULL)
                 return INFIX_ERROR_GENERAL;
 
-            push_symbol_with_shunting_yard(symbol, output_queue,
-                                           &holding_stack);
+            push_symbol_with_shunting_yard(symbol, out_queue, &holding_stack);
 
             current_symbol_length = 0;
         }
@@ -158,7 +190,7 @@ int infix_to_postfix(char *src_str, SymbolQueue *output_queue,
             continue;
 
         // Push operator
-        if (push_symbol_with_shunting_yard(op, output_queue, &holding_stack))
+        if (push_symbol_with_shunting_yard(op, out_queue, &holding_stack))
             return INFIX_ERROR_MISMATCHED_PARENTHESIS;
     }
 
@@ -170,9 +202,9 @@ int infix_to_postfix(char *src_str, SymbolQueue *output_queue,
         if (symbol.type == SYMBOL_NULL)
             return INFIX_ERROR_GENERAL;
 
-        push_symbol_with_shunting_yard(symbol, output_queue, &holding_stack);
+        push_symbol_with_shunting_yard(symbol, out_queue, &holding_stack);
     }
 
     // Returns possible error code
-    return drain_holding_stack_into_output(output_queue, &holding_stack);
+    return drain_holding_stack_into_output(out_queue, &holding_stack);
 }
