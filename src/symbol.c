@@ -1,4 +1,5 @@
 #include "symbol.h"
+#include "infix_to_postfix.h"
 
 #define SYMBOL_FUNCTION_MAPPINGS_SIZE 3
 
@@ -73,13 +74,19 @@ Symbol parse_operator(char op) {
     return symbol;
 }
 
-Symbol parse_non_operator_symbol(char *str, int is_function) {
+Symbol parse_non_operator_symbol(char *str, int is_function,
+                                 VariableStorage *variables) {
     int is_variable_name = !is_function && isalpha(str[0]);
 
     if (is_variable_name) {
-        //  TODO:
-        Symbol null = {0};
-        return null;
+        Symbol symbol = {.type = SYMBOL_LITERAL, 0};
+
+        if (!variables_retrieve(variables, str, &symbol.literal))
+            return symbol;
+
+        // Undefined variable, return null type symbol to indicate error
+        symbol.type = SYMBOL_NULL;
+        return symbol;
     }
 
     if (is_function) {

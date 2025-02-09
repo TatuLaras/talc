@@ -3,7 +3,7 @@ CC = gcc
 CUSTOM_FLAGS = 
 CFLAGS = -Wall -ggdb -lm $(CUSTOM_FLAGS)
 
-all: setup test_stack test_infix_to_postfix test_queue test_double_stack test_calculate
+all: setup test_stack test_infix_to_postfix test_queue test_double_stack test_calculate test_variables
 
 setup:
 	@mkdir -p build
@@ -15,13 +15,16 @@ test_stack: test_stack.c
 	$(CC) $(CFLAGS) -o build/test_stack test_stack.c  ../src/external/unity.c ../src/symbol_stack.c 
 
 test_infix_to_postfix: test_infix_to_postfix.c
-	$(CC) $(CFLAGS) -o build/test_infix_to_postfix test_infix_to_postfix.c  ../src/external/unity.c ../src/infix_to_postfix.c ../src/symbol_stack.c ../src/queue.c ../src/symbol.c
+	$(CC) $(CFLAGS) -o build/test_infix_to_postfix test_infix_to_postfix.c  ../src/external/unity.c ../src/infix_to_postfix.c ../src/symbol_stack.c ../src/queue.c ../src/symbol.c ../src/variables.c
 
 test_queue: test_queue.c
 	$(CC) $(CFLAGS) -o build/test_queue test_queue.c  ../src/external/unity.c ../src/queue.c ../src/symbol_stack.c
 
 test_calculate: test_calculate.c
-	$(CC) $(CFLAGS) -o build/test_calculate test_calculate.c  ../src/external/unity.c ../src/calculate.c ../src/symbol_stack.c ../src/double_stack.c ../src/queue.c ../src/infix_to_postfix.c ../src/symbol.c
+	$(CC) $(CFLAGS) -o build/test_calculate test_calculate.c  ../src/external/unity.c ../src/calculate.c ../src/symbol_stack.c ../src/double_stack.c ../src/queue.c ../src/infix_to_postfix.c ../src/symbol.c ../src/variables.c
+
+test_variables: test_variables.c
+	$(CC) $(CFLAGS) -o build/test_variables test_variables.c  ../src/external/unity.c ../src/variables.c
 
 run: all
 	build/test_stack
@@ -29,3 +32,4 @@ run: all
 	build/test_infix_to_postfix
 	build/test_queue
 	build/test_calculate
+	build/test_variables

@@ -1,5 +1,4 @@
 #include "infix_to_postfix.h"
-#include "symbol.h"
 
 static int push_symbol_with_shunting_yard(Symbol symbol,
                                           SymbolQueue *output_queue,
@@ -66,7 +65,8 @@ int drain_holding_stack_into_output(SymbolQueue *output_queue,
     return 0;
 }
 
-int str_to_symbols_postfix(char *src_str, SymbolQueue *output_queue) {
+int infix_to_postfix(char *src_str, SymbolQueue *output_queue,
+                     VariableStorage *variables) {
     SymbolStack holding_stack = {0};
     stack_init(&holding_stack);
 
@@ -142,8 +142,8 @@ int str_to_symbols_postfix(char *src_str, SymbolQueue *output_queue) {
             // Ensure null-termination
             current_symbol[current_symbol_length] = 0;
 
-            Symbol symbol =
-                parse_non_operator_symbol(current_symbol, is_function_name);
+            Symbol symbol = parse_non_operator_symbol(
+                current_symbol, is_function_name, variables);
 
             if (symbol.type == SYMBOL_NULL)
                 return INFIX_ERROR_GENERAL;
@@ -165,11 +165,12 @@ int str_to_symbols_postfix(char *src_str, SymbolQueue *output_queue) {
     if (current_symbol_length > 0) {
         current_symbol[current_symbol_length] = 0;
 
-        Symbol numeric_literal = {.type = SYMBOL_LITERAL,
-                                  .literal = strtod(current_symbol, 0)};
+        Symbol symbol = parse_non_operator_symbol(current_symbol, 0, variables);
 
-        push_symbol_with_shunting_yard(numeric_literal, output_queue,
-                                       &holding_stack);
+        if (symbol.type == SYMBOL_NULL)
+            return INFIX_ERROR_GENERAL;
+
+        push_symbol_with_shunting_yard(symbol, output_queue, &holding_stack);
     }
 
     // Returns possible error code

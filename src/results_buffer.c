@@ -19,3 +19,8 @@ int results_buffer_get_latest(ResultsBuffer *buffer, int i,
 
     return 0;
 }
+
+void results_buffer_clear(ResultsBuffer *buffer) {
+    buffer->count = 0;
+    buffer->__current = 0;
+}

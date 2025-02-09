@@ -4,6 +4,7 @@
 #include "queue.h"
 #include "symbol.h"
 #include "symbol_stack.h"
+#include "variables.h"
 
 #include <ctype.h>
 #include <stddef.h>
@@ -17,6 +18,7 @@
 
 // Attempts to covert a string expression in src_str to postfix / RPN form,
 // returns 1 on failure due to an invalid source expression.
-int str_to_symbols_postfix(char *src_str, SymbolQueue *output_queue);
+int infix_to_postfix(char *src_str, SymbolQueue *output_queue,
+                     VariableStorage *variables);
 
 #endif

@@ -5,13 +5,16 @@
 #include "infix_to_postfix.h"
 #include "results_buffer.h"
 #include "user_interface.h"
+#include "variables.h"
 #include <string.h>
 
 int main() {
 
     UserInterface ui = {0};
-
     ui_init(&ui);
+
+    VariableStorage variables = {0};
+    variables_init(&variables);
 
     char input_expression[UI_INPUT_BUFFER_SIZE] = {0};
 
@@ -25,22 +28,26 @@ int main() {
             SymbolQueue rpn = {0};
             queue_init(&rpn);
 
-            if (str_to_symbols_postfix(input_expression, &rpn)) {
-                ui.is_error = 1;
-                continue;
-            }
-
+            // Initialize a Result object to store the result in
             Result result = {0};
-
-            if (calculate_value(&rpn, &result.result)) {
-                ui.is_error = 1;
-                continue;
-            }
-
             result.expression = malloc(strlen(input_expression) * sizeof(char));
             strcpy(result.expression, input_expression);
 
-            ui.is_error = 0;
+            // Convert to reverse polish notation
+            if (infix_to_postfix(input_expression, &rpn, &variables)) {
+                result.erroneous = 1;
+                ui.erroneus = 1;
+                ui_append_result(&ui, result);
+                continue;
+            }
+
+            // Calculate result from reverse polish notation
+            if (calculate_value(&rpn, &result.result)) {
+                result.erroneous = 1;
+                ui.erroneus = 1;
+            } else
+                ui.erroneus = 0;
+
             ui_append_result(&ui, result);
         }
     }

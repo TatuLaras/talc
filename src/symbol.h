@@ -1,6 +1,8 @@
 #ifndef _SYMBOL
 #define _SYMBOL
 
+#include "variables.h"
+
 #include <ctype.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -42,7 +44,8 @@ Symbol parse_operator(char op);
 // Tries to parse a non-operator symbol from string
 //
 // Symbol type will be SYMBOL_NULL if invalid
-Symbol parse_non_operator_symbol(char *str, int is_function);
+Symbol parse_non_operator_symbol(char *str, int is_function,
+                                 VariableStorage *variables);
 
 //  NOTE: We use a function instead of a table for the number of operands so we
 //  can use our defined constants above, and changing their integer values does

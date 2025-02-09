@@ -20,7 +20,7 @@ Käyttäjä voi syöttää laskimeen lausekkeita ja ohjelma antaa lausekkeen arv
 - Syöte voi sisältää kokonaislukuja ja desimaalilukuja
 - Tavalliset aritmeettiset operaatiot: `+`, `-`, `*`, `/`, ja `^`.
 - Funktioita yhdellä parametrilla: `sin(x)`, `cos(x)`, `tan(x)`.
-- Funktioita kahdella parametrilla: `min(x; y)`, `max(x; y)`.
+- Funktioita kahdella parametrilla: `min(x, y)`, `max(x, y)`.
 - Arvon tallentaminen muuttujaan ja muuttujan käyttö lausekkeissa. 
 Muuttuja on kirjaimia ja numeroita sisältävä merkkijono, joka alkaa kirjaimella.
 Muuttujan määrittely (`muuttuja=`) voi esiintyä vain syötteen alussa.

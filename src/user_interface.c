@@ -1,5 +1,6 @@
 #include "user_interface.h"
 #include "external/termbox2.h"
+#include "results_buffer.h"
 
 static void ui_input_character(UserInterface *ui, char character) {
     if (ui->input_buffer_used >= UI_INPUT_BUFFER_SIZE ||
@@ -34,7 +35,7 @@ static void ui_render_input_line(UserInterface *ui) {
 static void ui_render_status_line(UserInterface *ui) {
     int row = tb_height() - 2;
 
-    if (ui->is_error)
+    if (ui->erroneus)
         tb_printf(0, row, TB_WHITE, TB_RED, " ERROR ");
 }
 
@@ -47,10 +48,37 @@ static void ui_render_results(UserInterface *ui) {
     while (!results_buffer_get_latest(&ui->results, i, &result)) {
         i++;
 
+        if (result.erroneous)
+            continue;
+
         tb_printf(1, line--, TB_DEFAULT, TB_DEFAULT, " = %lg", result.result);
         tb_printf(1, line--, TB_DEFAULT, TB_DEFAULT, result.expression);
         line--;
     }
+}
+
+// Shows some keyboard shortcuts in the top part of the screen
+static void ui_render_help_message(UserInterface *ui) {
+    int line = 1;
+
+    tb_printf(2, line++, TB_CYAN, 0, "ctrl+q to quit");
+    tb_printf(2, line++, TB_CYAN, 0, "ctrl+l to clear");
+}
+
+// Renders the TUI according to the state in the struct UserInterface
+static void ui_render(UserInterface *ui) {
+    tb_clear();
+
+    tb_set_cursor(ui->input_buffer_cursor, tb_height());
+
+    if (ui->results.count == 0)
+        ui_render_help_message(ui);
+
+    ui_render_input_line(ui);
+    ui_render_status_line(ui);
+    ui_render_results(ui);
+
+    tb_present();
 }
 
 static void ui_erase_character(UserInterface *ui) {
@@ -84,24 +112,23 @@ static int ui_handle_keyboard_input(UserInterface *ui, char *out_expression) {
         return 0;
     }
 
+    if (event.key == TB_KEY_CTRL_P || event.key == TB_KEY_ARROW_UP) {
+        //  TODO: previous result into buffer
+        return 0;
+    }
+
+    if (event.key == TB_KEY_CTRL_N || event.key == TB_KEY_ARROW_DOWN) {
+        //  TODO: next result into buffer
+        return 0;
+    }
+
+    if (event.key == TB_KEY_CTRL_L) {
+        results_buffer_clear(&ui->results);
+        return 0;
+    }
+
     ui_input_character(ui, event.ch);
     return 0;
-}
-
-// Renders the TUI according to the state in the struct UserInterface
-static void ui_render(UserInterface *ui) {
-    tb_clear();
-
-    tb_set_cursor(ui->input_buffer_cursor, tb_height());
-
-    if (ui->results.count == 0)
-        tb_printf(2, 1, TB_CYAN, 0, "ctrl+q to quit");
-
-    ui_render_input_line(ui);
-    ui_render_status_line(ui);
-    ui_render_results(ui);
-
-    tb_present();
 }
 
 void ui_init(UserInterface *ui) { tb_init(); }
