@@ -22,9 +22,9 @@ typedef struct {
 //  for very little performace gain.
 
 typedef struct {
-    int __size;
-    int __top;
-    Variable *__array;
+    int _size;
+    int top;
+    Variable *_array;
 } VariableStorage;
 
 // Initializes the variable storage data structure

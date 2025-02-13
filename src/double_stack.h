@@ -7,9 +7,9 @@
 #define DOUBLE_STACK_STARTING_SIZE 4
 
 typedef struct {
-    int __size;
-    int __top;
-    double *__array;
+    int _size;
+    int top;
+    double *_array;
 } DoubleStack;
 
 // Initialize a stack

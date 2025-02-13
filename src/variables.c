@@ -2,9 +2,9 @@
 #include <string.h>
 
 void variables_init(VariableStorage *var) {
-    var->__size = VARIABLES_STARTING_SIZE;
-    var->__top = 0;
-    var->__array =
+    var->_size = VARIABLES_STARTING_SIZE;
+    var->top = 0;
+    var->_array =
         (Variable *)malloc(sizeof(Variable) * VARIABLES_STARTING_SIZE);
 
     // Built-in variables
@@ -13,25 +13,25 @@ void variables_init(VariableStorage *var) {
 }
 
 void variables_free(VariableStorage *var) {
-    if (var->__array)
-        free(var->__array);
+    if (var->_array)
+        free(var->_array);
 
-    var->__array = 0;
-    var->__top = 0;
-    var->__size = 0;
+    var->_array = 0;
+    var->top = 0;
+    var->_size = 0;
 }
 
 void variables_assign(VariableStorage *var, char *name, double value) {
     Variable variable = {.value = value};
     strncpy(variable.name, name, VARIABLES_NAME_MAX_LENGTH);
 
-    if (var->__top == var->__size) {
-        var->__size *= 2;
-        var->__array =
-            (Variable *)realloc(var->__array, sizeof(Variable) * var->__size);
+    if (var->top == var->_size) {
+        var->_size *= 2;
+        var->_array =
+            (Variable *)realloc(var->_array, sizeof(Variable) * var->_size);
     }
 
-    var->__array[var->__top++] = variable;
+    var->_array[var->top++] = variable;
 }
 
 void variables_fullfill_assignment_request(VariableStorage *var,
@@ -43,8 +43,8 @@ void variables_fullfill_assignment_request(VariableStorage *var,
 int variables_retrieve(VariableStorage *var, char *name, double *out_value) {
     // We iterate in a reverse order so reassigned variables have the newer
     // value
-    for (int i = var->__top - 1; i >= 0; i--) {
-        Variable variable = var->__array[i];
+    for (int i = var->top - 1; i >= 0; i--) {
+        Variable variable = var->_array[i];
 
         if (strcmp(name, variable.name) == 0) {
             // Match!

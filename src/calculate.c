@@ -4,7 +4,7 @@
 static int do_operation(DoubleStack *holding_stack, Symbol *op) {
     int operands = num_operands(op);
 
-    if (holding_stack->__top < operands)
+    if (holding_stack->top < operands)
         return 1;
 
     // Not the most elegant, but avoids some code duplication
@@ -87,7 +87,7 @@ int calculate_value(SymbolQueue *postfix_expression, double *out_result) {
 
     // If there's not exactly one item left in the holding stack it means
     // the input expression was invalid
-    if (holding_stack.__top != 1)
+    if (holding_stack.top != 1)
         return 1;
 
     // Result

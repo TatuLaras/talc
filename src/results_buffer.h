@@ -10,8 +10,8 @@ typedef struct {
 } Result;
 
 typedef struct {
-    Result __data[RESULTS_BUFFER_SIZE];
-    int __current;
+    Result _data[RESULTS_BUFFER_SIZE];
+    int _current;
     int count;
 } ResultsBuffer;
 

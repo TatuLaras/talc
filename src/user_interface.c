@@ -61,7 +61,7 @@ static void ui_render_results(UserInterface *ui) {
 static void ui_render_help_message(UserInterface *ui) {
     int line = 1;
 
-    tb_printf(2, line++, TB_CYAN, 0, "ctrl+q to quit");
+    tb_printf(2, line++, TB_CYAN, 0, "ctrl+c to quit");
     tb_printf(2, line++, TB_CYAN, 0, "ctrl+l to clear");
 }
 
@@ -97,7 +97,7 @@ static int ui_handle_keyboard_input(UserInterface *ui, char *out_expression) {
 
     tb_poll_event(&event);
 
-    if (event.key == TB_KEY_CTRL_Q)
+    if (event.key == TB_KEY_CTRL_C)
         return UI_CODE_QUIT;
 
     if (event.key == TB_KEY_ENTER) {

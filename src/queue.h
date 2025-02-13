@@ -8,10 +8,10 @@
 #define QUEUE_STARTING_SIZE 4
 
 typedef struct {
-    int __size;
-    int __used;
-    int __start;
-    Symbol *__array;
+    int _size;
+    int _used;
+    int _start;
+    Symbol *_array;
 } SymbolQueue;
 
 // Initialize a queue

@@ -142,7 +142,7 @@ int infix_to_postfix(char *src_str, VariableStorage *variables,
             int invalid_assignment =
                 current_symbol_length == 0 ||
                 current_symbol_length >= VARIABLES_NAME_MAX_LENGTH ||
-                !isalpha(current_symbol[0]) || out_queue->__used > 0 ||
+                !isalpha(current_symbol[0]) || out_queue->_used > 0 ||
                 holding_stack.__top > 0 || out_variable_request->valid;
 
             if (invalid_assignment)
