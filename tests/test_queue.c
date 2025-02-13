@@ -8,17 +8,17 @@ void setUp() { queue_init(&queue); }
 void tearDown() { queue_free(&queue); }
 
 void test_queue_should_grow() {
-    int initial_size = queue.__size;
+    int initial_size = queue._size;
 
     TEST_ASSERT_EQUAL(QUEUE_STARTING_SIZE, initial_size);
-    TEST_ASSERT_EQUAL(0, queue.__used);
+    TEST_ASSERT_EQUAL(0, queue._used);
 
     for (int i = 0; i <= initial_size + 1; i++) {
         Symbol symbol = {0};
         queue_enqueue(&queue, symbol);
     }
 
-    TEST_ASSERT_EQUAL(initial_size * 2, queue.__size);
+    TEST_ASSERT_EQUAL(initial_size * 2, queue._size);
 }
 
 void test_queue_should_contain_pushed_values() {
@@ -30,7 +30,7 @@ void test_queue_should_contain_pushed_values() {
     }
 
     for (int i = 0; i < 6; i++) {
-        TEST_ASSERT_EQUAL(values[i], queue.__array[i].type);
+        TEST_ASSERT_EQUAL(values[i], queue._array[i].type);
     }
 }
 
@@ -48,7 +48,7 @@ void test_queue_dequeueing_works() {
         TEST_ASSERT_EQUAL(values[i], out_symbol.type);
     }
 
-    TEST_ASSERT_EQUAL(queue.__used, queue.__start);
+    TEST_ASSERT_EQUAL(queue._used, queue._start);
 }
 
 void test_over_dequeing_should_fail() {

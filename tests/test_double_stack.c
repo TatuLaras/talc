@@ -9,17 +9,17 @@ void test_double_stack_should_grow() {
     DoubleStack stack = {0};
     double_stack_init(&stack);
 
-    int initial_size = stack.__size;
+    int initial_size = stack._size;
 
     TEST_ASSERT_EQUAL(DOUBLE_STACK_STARTING_SIZE, initial_size);
-    TEST_ASSERT_EQUAL(0, stack.__top);
+    TEST_ASSERT_EQUAL(0, stack.top);
 
     for (int i = 0; i <= initial_size + 1; i++) {
         double item = 0;
         double_stack_push(&stack, item);
     }
 
-    TEST_ASSERT_EQUAL(initial_size * 2, stack.__size);
+    TEST_ASSERT_EQUAL(initial_size * 2, stack._size);
 
     double_stack_free(&stack);
 }
@@ -36,7 +36,7 @@ void test_double_stack_should_contain_pushed_values() {
     }
 
     for (int i = 0; i < 6; i++) {
-        TEST_ASSERT_EQUAL(values[i], stack.__array[i]);
+        TEST_ASSERT_EQUAL(values[i], stack._array[i]);
     }
 }
 
@@ -55,10 +55,10 @@ void test_double_stack_popping_works() {
         double out_symbol = {0};
         TEST_ASSERT_FALSE(double_stack_pop(&stack, &out_symbol));
         TEST_ASSERT_EQUAL(values[5 - i], out_symbol);
-        TEST_ASSERT_EQUAL(5 - i, stack.__top);
+        TEST_ASSERT_EQUAL(5 - i, stack.top);
     }
 
-    TEST_ASSERT_EQUAL(0, stack.__top);
+    TEST_ASSERT_EQUAL(0, stack.top);
 }
 
 void test_out_of_bounds_value_should_fail() {

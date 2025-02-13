@@ -1,6 +1,5 @@
 #include "../src/external/unity.h"
 #include "../src/variables.h"
-#include <stdio.h>
 
 static VariableStorage var = {0};
 
@@ -58,7 +57,7 @@ void test_undefined_variable() {
 }
 
 void test_array_should_grow() {
-    int initial_size = var.__size;
+    int initial_size = var._size;
 
     TEST_ASSERT_EQUAL(VARIABLES_STARTING_SIZE, initial_size);
 
@@ -67,7 +66,7 @@ void test_array_should_grow() {
         variables_assign(&var, "name", item);
     }
 
-    TEST_ASSERT_EQUAL(initial_size * 2, var.__size);
+    TEST_ASSERT_EQUAL(initial_size * 2, var._size);
 }
 
 void test_variable_reassignment() {
