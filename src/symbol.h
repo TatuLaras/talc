@@ -29,6 +29,8 @@
 #define SYMBOL_FUNC_MIN 10
 #define SYMBOL_FUNC_MAX 11
 #define SYMBOL_FUNC_SIN 12
+#define SYMBOL_FUNC_COS 13
+#define SYMBOL_FUNC_TAN 14
 
 typedef struct {
     int8_t type;

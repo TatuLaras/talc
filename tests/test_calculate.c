@@ -172,6 +172,108 @@ void test_fails_on_invalid_rpn_leftover_symbols() {
     TEST_ASSERT(calculate_value(&queue, &_result));
 }
 
+void test_calculate_with_variables() {
+    char *expression = "pi*3.5";
+    TEST_ASSERT_FALSE(
+        infix_to_postfix(expression, &variables, &symbols, &null_request));
+    double result = 0;
+    TEST_ASSERT_FALSE(calculate_value(&symbols, &result));
+    TEST_ASSERT(result > 10.99);
+    TEST_ASSERT(result < 11);
+}
+
+void test_invalid_operator_fails() {
+    double _result = 0;
+    SymbolQueue queue = {0};
+    queue_init(&queue);
+
+    Symbol symbols[3] = {
+        {.type = SYMBOL_LITERAL, .literal = 5},
+        {.type = SYMBOL_LITERAL, .literal = 5},
+        {.type = 123},
+    };
+
+    for (int i = 0; i < 3; i++) {
+        queue_enqueue(&queue, symbols[i]);
+    }
+
+    TEST_ASSERT(calculate_value(&queue, &_result));
+}
+
+void test_function_with_one_operand() {
+    double result = 0;
+    SymbolQueue queue = {0};
+    queue_init(&queue);
+
+    Symbol symbols[2] = {
+        {.type = SYMBOL_LITERAL, .literal = 0.5 * 3.141592653589793},
+        {.type = SYMBOL_FUNC_SIN},
+    };
+
+    for (int i = 0; i < 2; i++) {
+        queue_enqueue(&queue, symbols[i]);
+    }
+
+    TEST_ASSERT_FALSE(calculate_value(&queue, &result));
+    TEST_ASSERT(result == 1);
+}
+
+void test_function_with_two_operands() {
+    double result = 0;
+    SymbolQueue queue = {0};
+    queue_init(&queue);
+
+    Symbol symbols[3] = {
+        {.type = SYMBOL_LITERAL, .literal = 12},
+        {.type = SYMBOL_LITERAL, .literal = 123},
+        {.type = SYMBOL_FUNC_MAX},
+    };
+
+    for (int i = 0; i < 3; i++) {
+        queue_enqueue(&queue, symbols[i]);
+    }
+
+    TEST_ASSERT_FALSE(calculate_value(&queue, &result));
+    TEST_ASSERT_EQUAL(123, result);
+}
+
+void test_cos_function() {
+    double result = 0;
+    SymbolQueue queue = {0};
+    queue_init(&queue);
+
+    Symbol symbols[2] = {
+        {.type = SYMBOL_LITERAL, .literal = 2 * 3.141592653589793},
+        {.type = SYMBOL_FUNC_COS},
+    };
+
+    for (int i = 0; i < 2; i++) {
+        queue_enqueue(&queue, symbols[i]);
+    }
+
+    TEST_ASSERT_FALSE(calculate_value(&queue, &result));
+    TEST_ASSERT_EQUAL(1, result);
+}
+
+void test_tan_function() {
+    double result = 0;
+    SymbolQueue queue = {0};
+    queue_init(&queue);
+
+    Symbol symbols[2] = {
+        {.type = SYMBOL_LITERAL, .literal = 0.25 * 3.141592653589793},
+        {.type = SYMBOL_FUNC_TAN},
+    };
+
+    for (int i = 0; i < 2; i++) {
+        queue_enqueue(&queue, symbols[i]);
+    }
+
+    TEST_ASSERT_FALSE(calculate_value(&queue, &result));
+    TEST_ASSERT(result > 0.999);
+    TEST_ASSERT(result < 1.001);
+}
+
 int main() {
     UNITY_BEGIN();
 
@@ -186,6 +288,12 @@ int main() {
     RUN_TEST(test_fails_on_invalid_rpn_other_operators);
     RUN_TEST(test_fails_on_function_with_wrong_number_of_params);
     RUN_TEST(test_fails_on_undefined_function);
+    RUN_TEST(test_calculate_with_variables);
+    RUN_TEST(test_invalid_operator_fails);
+    RUN_TEST(test_function_with_one_operand);
+    RUN_TEST(test_function_with_two_operands);
+    RUN_TEST(test_tan_function);
+    RUN_TEST(test_cos_function);
 
     return UNITY_END();
 }

@@ -1,7 +1,7 @@
 #include "symbol.h"
 #include "infix_to_postfix.h"
 
-#define SYMBOL_FUNCTION_MAPPINGS_SIZE 3
+#define SYMBOL_FUNCTION_MAPPINGS_SIZE 5
 
 struct FunctionNameMapping {
     const char *name;
@@ -13,6 +13,8 @@ static struct FunctionNameMapping
         {.name = "min", .type = SYMBOL_FUNC_MIN},
         {.name = "max", .type = SYMBOL_FUNC_MAX},
         {.name = "sin", .type = SYMBOL_FUNC_SIN},
+        {.name = "cos", .type = SYMBOL_FUNC_COS},
+        {.name = "tan", .type = SYMBOL_FUNC_TAN},
 };
 
 // Tries to parse a multi-character function name into appropriate Symbol
@@ -120,6 +122,10 @@ int num_operands(Symbol *symbol) {
     case SYMBOL_FUNC_MAX:
         return 2;
     case SYMBOL_FUNC_SIN:
+        return 1;
+    case SYMBOL_FUNC_COS:
+        return 1;
+    case SYMBOL_FUNC_TAN:
         return 1;
     default:
         return 0;

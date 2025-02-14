@@ -63,6 +63,14 @@ static int do_operation(DoubleStack *holding_stack, Symbol *op) {
     case SYMBOL_FUNC_SIN: {
         double_stack_push(holding_stack, sin(first));
     } break;
+
+    case SYMBOL_FUNC_COS: {
+        double_stack_push(holding_stack, cos(first));
+    } break;
+
+    case SYMBOL_FUNC_TAN: {
+        double_stack_push(holding_stack, tan(first));
+    } break;
     }
 
     return 0;
