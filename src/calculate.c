@@ -1,5 +1,6 @@
 #include "calculate.h"
 #include "symbol.h"
+#include <math.h>
 
 static int do_operation(DoubleStack *holding_stack, Symbol *op) {
     int operands = num_operands(op);
@@ -70,6 +71,18 @@ static int do_operation(DoubleStack *holding_stack, Symbol *op) {
 
     case SYMBOL_FUNC_TAN: {
         double_stack_push(holding_stack, tan(first));
+    } break;
+
+    case SYMBOL_FUNC_LOG: {
+        double_stack_push(holding_stack, log(second) / log(first));
+    } break;
+
+    case SYMBOL_FUNC_LN: {
+        double_stack_push(holding_stack, log(first));
+    } break;
+
+    case SYMBOL_FUNC_LG: {
+        double_stack_push(holding_stack, log10(first));
     } break;
     }
 

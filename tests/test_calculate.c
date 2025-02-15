@@ -274,6 +274,62 @@ void test_tan_function() {
     TEST_ASSERT(result < 1.001);
 }
 
+void test_ln_function() {
+    double result = 0;
+    SymbolQueue queue = {0};
+    queue_init(&queue);
+
+    Symbol symbols[2] = {
+        {.type = SYMBOL_LITERAL, .literal = 2.718281828459045},
+        {.type = SYMBOL_FUNC_LN},
+    };
+
+    for (int i = 0; i < 2; i++) {
+        queue_enqueue(&queue, symbols[i]);
+    }
+
+    TEST_ASSERT_FALSE(calculate_value(&queue, &result));
+    TEST_ASSERT(result == 1);
+    TEST_ASSERT(result < 1.001);
+}
+
+void test_lg_function() {
+    double result = 0;
+    SymbolQueue queue = {0};
+    queue_init(&queue);
+
+    Symbol symbols[2] = {
+        {.type = SYMBOL_LITERAL, .literal = 100000000},
+        {.type = SYMBOL_FUNC_LG},
+    };
+
+    for (int i = 0; i < 2; i++) {
+        queue_enqueue(&queue, symbols[i]);
+    }
+
+    TEST_ASSERT_FALSE(calculate_value(&queue, &result));
+    TEST_ASSERT(result == 8);
+}
+
+void test_log_function() {
+    double result = 0;
+    SymbolQueue queue = {0};
+    queue_init(&queue);
+
+    Symbol symbols[3] = {
+        {.type = SYMBOL_LITERAL, .literal = 12},
+        {.type = SYMBOL_LITERAL, .literal = 429981696},
+        {.type = SYMBOL_FUNC_LOG},
+    };
+
+    for (int i = 0; i < 3; i++) {
+        queue_enqueue(&queue, symbols[i]);
+    }
+
+    TEST_ASSERT_FALSE(calculate_value(&queue, &result));
+    TEST_ASSERT(result == 8);
+}
+
 int main() {
     UNITY_BEGIN();
 
@@ -294,6 +350,9 @@ int main() {
     RUN_TEST(test_function_with_two_operands);
     RUN_TEST(test_tan_function);
     RUN_TEST(test_cos_function);
+    RUN_TEST(test_ln_function);
+    RUN_TEST(test_lg_function);
+    RUN_TEST(test_log_function);
 
     return UNITY_END();
 }
