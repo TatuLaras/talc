@@ -34,6 +34,9 @@
 #define SYMBOL_FUNC_LOG 15
 #define SYMBOL_FUNC_LN 16
 #define SYMBOL_FUNC_LG 17
+#define SYMBOL_FUNC_ASIN 18
+#define SYMBOL_FUNC_ACOS 19
+#define SYMBOL_FUNC_ATAN 20
 
 typedef struct {
     int8_t type;

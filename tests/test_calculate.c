@@ -330,6 +330,60 @@ void test_log_function() {
     TEST_ASSERT(result == 8);
 }
 
+void test_acos_function() {
+    double result = 0;
+    SymbolQueue queue = {0};
+    queue_init(&queue);
+
+    Symbol symbols[2] = {
+        {.type = SYMBOL_LITERAL, .literal = 1},
+        {.type = SYMBOL_FUNC_ACOS},
+    };
+
+    for (int i = 0; i < 2; i++) {
+        queue_enqueue(&queue, symbols[i]);
+    }
+
+    TEST_ASSERT_FALSE(calculate_value(&queue, &result));
+    TEST_ASSERT_EQUAL_DOUBLE(0, result);
+}
+
+void test_asin_function() {
+    double result = 0;
+    SymbolQueue queue = {0};
+    queue_init(&queue);
+
+    Symbol symbols[2] = {
+        {.type = SYMBOL_LITERAL, .literal = 1},
+        {.type = SYMBOL_FUNC_ASIN},
+    };
+
+    for (int i = 0; i < 2; i++) {
+        queue_enqueue(&queue, symbols[i]);
+    }
+
+    TEST_ASSERT_FALSE(calculate_value(&queue, &result));
+    TEST_ASSERT_EQUAL_DOUBLE(0.5 * 3.141592653589793, result);
+}
+
+void test_atan_function() {
+    double result = 0;
+    SymbolQueue queue = {0};
+    queue_init(&queue);
+
+    Symbol symbols[2] = {
+        {.type = SYMBOL_LITERAL, .literal = 1},
+        {.type = SYMBOL_FUNC_ATAN},
+    };
+
+    for (int i = 0; i < 2; i++) {
+        queue_enqueue(&queue, symbols[i]);
+    }
+
+    TEST_ASSERT_FALSE(calculate_value(&queue, &result));
+    TEST_ASSERT_EQUAL_DOUBLE(0.25 * 3.141592653589793, result);
+}
+
 int main() {
     UNITY_BEGIN();
 
@@ -353,6 +407,9 @@ int main() {
     RUN_TEST(test_ln_function);
     RUN_TEST(test_lg_function);
     RUN_TEST(test_log_function);
+    RUN_TEST(test_acos_function);
+    RUN_TEST(test_asin_function);
+    RUN_TEST(test_atan_function);
 
     return UNITY_END();
 }

@@ -31,9 +31,12 @@ Tulokset voi pyyhkiä `ctrl+l` -näppäinyhdistelmällä. Ohjelmasta poistuminen
 ### Funktiot
 | Funktio | |
 | --- | --- |
-| sin(x) | Sinifunktio|
+| sin(x) | Sinifunktio |
 | cos(x) | Kosinifunktio |
 | tan(x) | Tangenttifunktio |
+| asin(x) | Sinifunktion käänteisfunktio |
+| acos(x) | Kosinifunktion käänteisfunktio |
+| atan(x) | Tangenttifunktion käänteisfunktio |
 | max(x, y) | Palauttaa luvuista suuremman |
 | min(x, y) | Palauttaa luvuista pienemmän |
 | ln(x) | Luonnollinen (e-kantainen) logaritmi |

@@ -1,7 +1,7 @@
 #  TODO: Make dynamic with https://www.throwtheswitch.org/build/make
 CC = gcc
 CUSTOM_FLAGS = 
-CFLAGS = -Wall -ggdb -lm $(CUSTOM_FLAGS)
+CFLAGS = -Wall -ggdb -lm -DUNITY_INCLUDE_DOUBLE $(CUSTOM_FLAGS)
 
 all: setup test_stack test_infix_to_postfix test_queue test_double_stack test_calculate test_variables
 

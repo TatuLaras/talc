@@ -84,6 +84,18 @@ static int do_operation(DoubleStack *holding_stack, Symbol *op) {
     case SYMBOL_FUNC_LG: {
         double_stack_push(holding_stack, log10(first));
     } break;
+
+    case SYMBOL_FUNC_ASIN: {
+        double_stack_push(holding_stack, asin(first));
+    } break;
+
+    case SYMBOL_FUNC_ACOS: {
+        double_stack_push(holding_stack, acos(first));
+    } break;
+
+    case SYMBOL_FUNC_ATAN: {
+        double_stack_push(holding_stack, atan(first));
+    } break;
     }
 
     return 0;

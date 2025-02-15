@@ -1,11 +1,11 @@
 # Viikkoraportti 5
 
-Käytetyt tunnit: n. 5
+Käytetyt tunnit: n. 7
 
 Tällä viikolla:
 - Vertaispalaute ja sen vastaanottaminen
 - Käyttäjän omat muuttujat
-- Sin ja cos
+- Cos, tan, $\text{sin}^{-1}$, $\text{cos}^{-1}$, $\text{tan}^{-1}$
 - Logaritmit (luonnollinen, 10-kanta, n-kanta)
 - Testejä
 
