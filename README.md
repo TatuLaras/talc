@@ -19,7 +19,34 @@ $ make run
 
 
 ## Käyttöohjeet
-TBD
+Ohjelmassa voit kirjoittaa operaattoreista, funktioista, desimaaliluvuista ja kokonaisluvuista koostuvia matemaattisia lausekkeita ja laskea ne Enter-näppäintä painamalla.
+Ohjelma tukee operaattoreita `+`, `-`, `*`, `/`, ja `^`, sekä sulkuja ja funktioita (esim. `sin(3.14)`).
+
+Omia muuttujia pystyy määrittelemään kirjoittamalla laskutoimituksen alkuun muuttujan nimen ja `=`-merkin (esim. `omamuuttuja1 = 5 + 5`).
+Tämän jälkeen muuttujaa voi käyttää lukuarvon tilalla.
+Ohjelmassa on myös joitain sisäänrakennettuja muuttujia, jotka on listattu alempana.
+
+Tulokset voi pyyhkiä `ctrl+l` -näppäinyhdistelmällä. Ohjelmasta poistuminen onnistuu `ctrl-c` -näppäinyhdistelmällä.
+
+### Funktiot
+| Funktio | |
+| --- | --- |
+| sin(x) | Sinifunktio|
+| cos(x) | Kosinifunktio |
+| tan(x) | Tangenttifunktio |
+| max(x, y) | Palauttaa luvuista suuremman |
+| min(x, y) | Palauttaa luvuista pienemmän |
+| ln(x) | Luonnollinen (e-kantainen) logaritmi |
+| lg(x) | Yleinen (10-kantainen) logaritmi |
+| log(kanta, x) | N-kantainen logaritmi |
+
+### Sisäänrakennetut muuttujat
+
+| Muuttuja | |
+| --- | --- |
+| ans | Viimeisimmän laskutoimituksen tulos |
+| pi ||
+| e | Neperin luku|
 
 ## Testit
 Projektin yksikkötestit sijaitsevat projektin juuren `/tests` -kansiossa. Kääntääksesi kaikki testit voit käyttää `/tests` -kansiossa ollessasi:
