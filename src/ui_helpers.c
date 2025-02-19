@@ -1,26 +1,21 @@
 #include "ui_helpers.h"
+#include "symbol.h"
 
-#define SUGGESTION_ENTRIES_SIZE 3
-
-static DocumentationEntry entries[SUGGESTION_ENTRIES_SIZE] = {
-    {.name = "min", .summary = "min(x, y) - The smaller of x and y"},
-    {.name = "max", .summary = "max(x, y) - The larger of x and y"},
-    {.name = "asin", .summary = "asin(x) - Arc sine of x"},
-};
+extern FunctionNameMapping functions[SYMBOL_FUNCTION_MAPPINGS_SIZE];
 
 // Gets an entry from the documentation table above
 static int get_documentation_entry(char *incomplete_name,
-                                   DocumentationEntry *out_entry) {
+                                   FunctionNameMapping *out_entry) {
     int incomplete_name_length = strlen(incomplete_name);
 
     if (incomplete_name_length == 0)
         return 1;
 
-    for (int i = 0; i < SUGGESTION_ENTRIES_SIZE; i++) {
-        if (strncmp(incomplete_name, entries[i].name, incomplete_name_length) ==
-            0) {
+    for (int i = 0; i < SYMBOL_FUNCTION_MAPPINGS_SIZE; i++) {
+        if (strncmp(incomplete_name, functions[i].name,
+                    incomplete_name_length) == 0) {
             // Match
-            *out_entry = entries[i];
+            *out_entry = functions[i];
             return 0;
         }
     }
@@ -57,20 +52,33 @@ int ui_helper_get_currently_typed_name(UserInterface *ui, char *out_name,
     return 0;
 }
 
-int ui_helper_get_summary(char *incomplete_name, char *out_summary,
-                          int out_summary_length) {
-    DocumentationEntry entry = {0};
+int ui_helper_get_summary(char *incomplete_name, VariableStorage *var,
+                          char *out_summary, int out_summary_length) {
+    FunctionNameMapping entry = {0};
 
-    if (get_documentation_entry(incomplete_name, &entry))
-        return 1;
+    // Function
+    if (!get_documentation_entry(incomplete_name, &entry)) {
+        strncpy(out_summary, entry.summary, out_summary_length);
+        return 0;
+    }
 
-    strncpy(out_summary, entry.summary, out_summary_length);
-    return 0;
+    // Variable
+    double value = 0;
+    char name[100] = {0};
+    if (!variables_retrieve_suggestion(var, incomplete_name, &value, name,
+                                       99)) {
+        snprintf(out_summary, out_summary_length, "%s - %lg", name, value);
+        return 0;
+    }
+
+    return 1;
 }
 
-int ui_helper_get_completion(char *incomplete_name, char *out_completion,
-                             int out_completion_length, int *out_is_function) {
-    DocumentationEntry entry = {0};
+int ui_helper_get_completion(char *incomplete_name, VariableStorage *var,
+                             char *out_completion, int out_completion_length,
+                             int *out_is_function) {
+    // Function
+    FunctionNameMapping entry = {0};
 
     if (!get_documentation_entry(incomplete_name, &entry)) {
         strncpy(out_completion, entry.name, out_completion_length);
@@ -81,7 +89,14 @@ int ui_helper_get_completion(char *incomplete_name, char *out_completion,
         return 0;
     }
 
-    // TODO: Variables
+    // Variable
+    double _value;
+    char name[100] = {0};
+    if (!variables_retrieve_suggestion(var, incomplete_name, &_value, name,
+                                       99)) {
+        strncpy(out_completion, name, out_completion_length);
+        return 0;
+    }
 
     return 1;
 }

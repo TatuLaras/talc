@@ -19,7 +19,7 @@ int main() {
     char input_expression[UI_INPUT_BUFFER_SIZE] = {0};
 
     while (1) {
-        int code = ui_main(&ui, input_expression);
+        int code = ui_main(&ui, &variables, input_expression);
 
         if (code == UI_CODE_QUIT)
             break;

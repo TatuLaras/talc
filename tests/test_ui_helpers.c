@@ -2,9 +2,10 @@
 #include "../src/ui_helpers.h"
 #include <string.h>
 
-void setUp() {}
+VariableStorage var = {0};
 
-void tearDown() {}
+void setUp() { variables_init(&var); }
+void tearDown() { variables_free(&var); }
 
 void test_currently_typed_name_parsed_correctly_simple_case() {
     UserInterface ui = {0};
@@ -15,7 +16,7 @@ void test_currently_typed_name_parsed_correctly_simple_case() {
     ui.input_buffer_cursor = strlen(str);
 
     char result[100] = {0};
-    TEST_ASSERT_FALSE(ui_helper_get_currently_typed_name(&ui, result, 100));
+    TEST_ASSERT_FALSE(ui_helper_get_currently_typed_name(&ui, result, 100, 0));
     TEST_ASSERT_EQUAL(0, strcmp("hello", result));
 }
 
@@ -28,7 +29,7 @@ void test_currently_typed_name_parsed_correctly_only_name() {
     ui.input_buffer_cursor = strlen(str);
 
     char result[100] = {0};
-    TEST_ASSERT_FALSE(ui_helper_get_currently_typed_name(&ui, result, 100));
+    TEST_ASSERT_FALSE(ui_helper_get_currently_typed_name(&ui, result, 100, 0));
     TEST_ASSERT_EQUAL(0, strcmp("hello", result));
 }
 
@@ -41,7 +42,7 @@ void test_currently_typed_name_parsed_correctly_complicated_case() {
     ui.input_buffer_cursor = strlen(str);
 
     char result[100] = {0};
-    TEST_ASSERT_FALSE(ui_helper_get_currently_typed_name(&ui, result, 100));
+    TEST_ASSERT_FALSE(ui_helper_get_currently_typed_name(&ui, result, 100, 0));
     TEST_ASSERT_EQUAL(0, strcmp("thisshouldbeit", result));
 }
 
@@ -54,7 +55,7 @@ void test_currently_typed_name_fails_on_number() {
     ui.input_buffer_cursor = strlen(str);
 
     char result[100] = {0};
-    TEST_ASSERT(ui_helper_get_currently_typed_name(&ui, result, 100));
+    TEST_ASSERT(ui_helper_get_currently_typed_name(&ui, result, 100, 0));
 }
 
 void test_currently_typed_name_fails_on_operator() {
@@ -66,7 +67,7 @@ void test_currently_typed_name_fails_on_operator() {
     ui.input_buffer_cursor = strlen(str);
 
     char result[100] = {0};
-    TEST_ASSERT(ui_helper_get_currently_typed_name(&ui, result, 100));
+    TEST_ASSERT(ui_helper_get_currently_typed_name(&ui, result, 100, 0));
 }
 
 void test_currently_typed_name_fails_on_parenthesis() {
@@ -78,7 +79,7 @@ void test_currently_typed_name_fails_on_parenthesis() {
     ui.input_buffer_cursor = strlen(str);
 
     char result[100] = {0};
-    TEST_ASSERT(ui_helper_get_currently_typed_name(&ui, result, 100));
+    TEST_ASSERT(ui_helper_get_currently_typed_name(&ui, result, 100, 0));
 }
 
 void test_currently_typed_name_wont_overflow() {
@@ -98,13 +99,13 @@ void test_correct_summary_is_returned() {
     char *incomplete = "mi";
     char summary[4] = {0};
 
-    TEST_ASSERT_FALSE(ui_helper_get_summary(incomplete, summary, 3));
+    TEST_ASSERT_FALSE(ui_helper_get_summary(incomplete, &var, summary, 3));
     TEST_ASSERT_FALSE(strcmp("min", summary));
 
     char *incomplete2 = "max";
     char summary2[10] = {0};
 
-    TEST_ASSERT_FALSE(ui_helper_get_summary(incomplete2, summary2, 9));
+    TEST_ASSERT_FALSE(ui_helper_get_summary(incomplete2, &var, summary2, 9));
     TEST_ASSERT_FALSE(strcmp("max(x, y)", summary2));
 }
 
@@ -113,12 +114,34 @@ void test_correct_completion_is_returned() {
     char completion[10] = {0};
 
     int is_function = 0;
-    TEST_ASSERT_FALSE(
-        ui_helper_get_completion(incomplete, completion, 9, &is_function));
+    TEST_ASSERT_FALSE(ui_helper_get_completion(incomplete, &var, completion, 9,
+                                               &is_function));
     TEST_ASSERT_FALSE(strcmp("asin", completion));
     TEST_ASSERT(is_function);
 }
 
+void test_correct_variable_summary_is_returned() {
+    variables_assign(&var, "longvariablename", 5.5);
+
+    char *incomplete = "longv";
+    char summary[30] = {0};
+
+    TEST_ASSERT_FALSE(ui_helper_get_summary(incomplete, &var, summary, 29));
+    TEST_ASSERT_FALSE(strcmp("longvariablename - 5.5", summary));
+}
+
+void test_correct_variable_completion_is_returned() {
+    variables_assign(&var, "longvariablename", 5.5);
+
+    char *incomplete = "longv";
+    char completion[30] = {0};
+
+    int is_function = 0;
+    TEST_ASSERT_FALSE(ui_helper_get_completion(incomplete, &var, completion, 29,
+                                               &is_function));
+    TEST_ASSERT_FALSE(strcmp("longvariablename", completion));
+    TEST_ASSERT_FALSE(is_function);
+}
 int main() {
     UNITY_BEGIN();
 
@@ -131,6 +154,8 @@ int main() {
     RUN_TEST(test_currently_typed_name_wont_overflow);
     RUN_TEST(test_currently_typed_name_parsed_correctly_only_name);
     RUN_TEST(test_correct_completion_is_returned);
+    RUN_TEST(test_correct_variable_summary_is_returned);
+    RUN_TEST(test_correct_variable_completion_is_returned);
 
     return UNITY_END();
 }

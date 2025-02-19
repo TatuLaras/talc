@@ -27,7 +27,7 @@ test_variables: test_variables.c
 	$(CC) $(CFLAGS) -o build/test_variables test_variables.c  ../src/external/unity.c ../src/variables.c
 	
 test_ui_helpers: test_ui_helpers.c
-	$(CC) $(CFLAGS) -o build/test_ui_helpers test_ui_helpers.c  ../src/external/unity.c ../src/ui_helpers.c
+	$(CC) $(CFLAGS) -o build/test_ui_helpers test_ui_helpers.c  ../src/external/unity.c ../src/ui_helpers.c ../src/variables.c ../src/symbol.c
 
 run: all
 	build/test_stack

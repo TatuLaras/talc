@@ -1,12 +1,11 @@
 #ifndef _UI_HELPERS
 #define _UI_HELPERS
 
+#include "symbol.h"
 #include "user_interface.h"
-
-typedef struct {
-    char *name;
-    char *summary;
-} DocumentationEntry;
+#include "variables.h"
+#include <stdio.h>
+#include <string.h>
 
 // Gets a function or variable name that is currently being written in the input
 // buffer (for suggestions).
@@ -26,13 +25,14 @@ int ui_helper_get_currently_typed_name(UserInterface *ui, char *out_name,
 // something like "max(x, y) - Returns the maximum of x and y").
 //
 // Returns 1 if no match is found
-int ui_helper_get_summary(char *incomplete_name, char *out_summary,
-                          int out_summary_length);
+int ui_helper_get_summary(char *incomplete_name, VariableStorage *variables,
+                          char *out_summary, int out_summary_length);
 
 // Returns the completed name for an incomplete name (e.g. "mi" => "min")
 //
 // Returns 1 if no match is found
-int ui_helper_get_completion(char *incomplete_name, char *out_completion,
-                             int out_completion_length, int *out_is_function);
+int ui_helper_get_completion(char *incomplete_name, VariableStorage *var,
+                             char *out_completion, int out_completion_length,
+                             int *out_is_function);
 
 #endif

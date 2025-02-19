@@ -56,3 +56,26 @@ int variables_retrieve(VariableStorage *var, char *name, double *out_value) {
     // Not defined
     return 1;
 }
+
+int variables_retrieve_suggestion(VariableStorage *var, char *incomplete_name,
+                                  double *out_value, char *out_name,
+                                  int out_name_length) {
+    int incomplete_name_length = strlen(incomplete_name);
+    if (incomplete_name_length == 0)
+        return 1;
+
+    for (int i = var->top - 1; i >= 0; i--) {
+        Variable variable = var->_array[i];
+
+        if (strncmp(incomplete_name, variable.name, incomplete_name_length) ==
+            0) {
+            // Match!
+            *out_value = variable.value;
+            strncpy(out_name, variable.name, out_name_length);
+            return 0;
+        }
+    }
+
+    // Not defined
+    return 1;
+}

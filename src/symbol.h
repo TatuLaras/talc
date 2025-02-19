@@ -8,6 +8,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define SYMBOL_FUNCTION_MAPPINGS_SIZE 11
+
 // data: none
 // used to catch errors
 #define SYMBOL_NULL 0
@@ -43,6 +45,13 @@ typedef struct {
     int8_t operator_precedence;
     double literal;
 } Symbol;
+
+typedef struct {
+    const char *name;
+    const char *summary;
+    int type;
+
+} FunctionNameMapping;
 
 // Tries to parse a single-character operator into appropriate Symbol
 //

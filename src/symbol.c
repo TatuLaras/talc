@@ -1,25 +1,45 @@
 #include "symbol.h"
 
-#define SYMBOL_FUNCTION_MAPPINGS_SIZE 11
+FunctionNameMapping functions[SYMBOL_FUNCTION_MAPPINGS_SIZE] = {
+    {.name = "min",
+     .type = SYMBOL_FUNC_MIN,
+     .summary = "min(x, y) - The smaller of x and y"},
 
-struct FunctionNameMapping {
-    const char *name;
-    int type;
-};
+    {.name = "max",
+     .type = SYMBOL_FUNC_MAX,
+     .summary = "max(x, y) - The larger of x and y"},
 
-static struct FunctionNameMapping
-    function_mappings[SYMBOL_FUNCTION_MAPPINGS_SIZE] = {
-        {.name = "min", .type = SYMBOL_FUNC_MIN},
-        {.name = "max", .type = SYMBOL_FUNC_MAX},
-        {.name = "sin", .type = SYMBOL_FUNC_SIN},
-        {.name = "cos", .type = SYMBOL_FUNC_COS},
-        {.name = "tan", .type = SYMBOL_FUNC_TAN},
-        {.name = "log", .type = SYMBOL_FUNC_LOG},
-        {.name = "ln", .type = SYMBOL_FUNC_LN},
-        {.name = "lg", .type = SYMBOL_FUNC_LG},
-        {.name = "asin", .type = SYMBOL_FUNC_ASIN},
-        {.name = "acos", .type = SYMBOL_FUNC_ACOS},
-        {.name = "atan", .type = SYMBOL_FUNC_ATAN},
+    {.name = "sin", .type = SYMBOL_FUNC_SIN, .summary = "sin(x) - Sine of x"},
+
+    {.name = "cos", .type = SYMBOL_FUNC_COS, .summary = "cos(x) - Cosine of x"},
+
+    {.name = "tan",
+     .type = SYMBOL_FUNC_TAN,
+     .summary = "tan(x) - Tangent of x"},
+
+    {.name = "log",
+     .type = SYMBOL_FUNC_LOG,
+     .summary = "log(b, x) - Base b logarithm of x"},
+
+    {.name = "ln",
+     .type = SYMBOL_FUNC_LN,
+     .summary = "ln(x) - Natural (base e) logarithm of x"},
+
+    {.name = "lg",
+     .type = SYMBOL_FUNC_LG,
+     .summary = "lg(x) - Common (base-10) logarithm of x"},
+
+    {.name = "asin",
+     .type = SYMBOL_FUNC_ASIN,
+     .summary = "asin(x) - Arc sine of x"},
+
+    {.name = "acos",
+     .type = SYMBOL_FUNC_ACOS,
+     .summary = "acos(x) - Arc cosine of x"},
+
+    {.name = "atan",
+     .type = SYMBOL_FUNC_ATAN,
+     .summary = "atan(x) - Arc tangent of x"},
 };
 
 // Tries to parse a multi-character function name into appropriate Symbol
@@ -29,8 +49,8 @@ static Symbol parse_function(char *function_name) {
     int8_t operator_type = 0;
 
     for (int i = 0; i < SYMBOL_FUNCTION_MAPPINGS_SIZE; i++) {
-        if (!strcmp(function_name, function_mappings[i].name))
-            operator_type = function_mappings[i].type;
+        if (!strcmp(function_name, functions[i].name))
+            operator_type = functions[i].type;
     }
 
     Symbol symbol = {.type = operator_type, .operator_precedence = 10};

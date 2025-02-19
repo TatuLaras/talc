@@ -46,4 +46,11 @@ void variables_fullfill_assignment_request(VariableStorage *var,
 // Returns 1 if variable is not defined
 int variables_retrieve(VariableStorage *var, char *name, double *out_value);
 
+// Retrieves the first variable that matches the `incomplete_name`
+//
+// Returns 1 if no such match is found
+int variables_retrieve_suggestion(VariableStorage *var, char *incomplete_name,
+                                  double *out_value, char *out_name,
+                                  int out_name_length);
+
 #endif

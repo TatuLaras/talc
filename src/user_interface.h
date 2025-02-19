@@ -35,7 +35,7 @@ void ui_append_result(UserInterface *ui, Result result);
 //
 // Returns with a code described by the UI_CODE ... constants in this header
 // file
-int ui_main(UserInterface *ui, char *out_expression);
+int ui_main(UserInterface *ui, VariableStorage *var, char *out_expression);
 
 // De-initializes the internal buffers (of the termbox2 library mainly).
 void ui_shutdown(UserInterface *ui);
