@@ -21,6 +21,7 @@ $ make run
 ## Käyttöohjeet
 Ohjelmassa voit kirjoittaa operaattoreista, funktioista, desimaaliluvuista ja kokonaisluvuista koostuvia matemaattisia lausekkeita ja laskea ne Enter-näppäintä painamalla.
 Ohjelma tukee operaattoreita `+`, `-`, `*`, `/`, ja `^`, sekä sulkuja ja funktioita (esim. `sin(3.14)`).
+Desimaalierottimena ohjelma käyttää pistettä ja funktioiden argumenttien välissä on pilkku.
 
 Omia muuttujia pystyy määrittelemään kirjoittamalla laskutoimituksen alkuun muuttujan nimen ja `=`-merkin (esim. `omamuuttuja1 = 5 + 5`).
 Tämän jälkeen muuttujaa voi käyttää lukuarvon tilalla.
