@@ -3,7 +3,7 @@ CC = gcc
 CUSTOM_FLAGS = 
 CFLAGS = -Wall -ggdb -lm -DUNITY_INCLUDE_DOUBLE $(CUSTOM_FLAGS)
 
-all: setup test_stack test_infix_to_postfix test_queue test_double_stack test_calculate test_variables
+all: setup test_stack test_infix_to_postfix test_queue test_double_stack test_calculate test_variables test_ui_helpers
 
 setup:
 	@mkdir -p build
@@ -25,6 +25,9 @@ test_calculate: test_calculate.c
 
 test_variables: test_variables.c
 	$(CC) $(CFLAGS) -o build/test_variables test_variables.c  ../src/external/unity.c ../src/variables.c
+	
+test_ui_helpers: test_ui_helpers.c
+	$(CC) $(CFLAGS) -o build/test_ui_helpers test_ui_helpers.c  ../src/external/unity.c ../src/ui_helpers.c
 
 run: all
 	build/test_stack
@@ -33,3 +36,4 @@ run: all
 	build/test_queue
 	build/test_calculate
 	build/test_variables
+	build/test_ui_helpers

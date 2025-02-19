@@ -1,8 +1,9 @@
 #include "user_interface.h"
 #include "external/termbox2.h"
 #include "results_buffer.h"
+#include "ui_helpers.h"
 
-static void ui_input_character(UserInterface *ui, char character) {
+static void input_character(UserInterface *ui, char character) {
     if (ui->input_buffer_used >= UI_INPUT_BUFFER_SIZE ||
         ui->input_buffer_used >= tb_width() - 1)
         return;
@@ -11,13 +12,13 @@ static void ui_input_character(UserInterface *ui, char character) {
     ui->input_buffer_cursor++;
 }
 
-static void ui_reset_input(UserInterface *ui) {
+static void reset_input(UserInterface *ui) {
     ui->input_buffer_used = 0;
     ui->input_buffer_cursor = 0;
 }
 
 // Renders the current input buffer as an input line in the bottom of the TUI
-static void ui_render_input_line(UserInterface *ui) {
+static void render_input_line(UserInterface *ui) {
     int row = tb_height() - 1;
 
     // Input buffer
@@ -32,15 +33,28 @@ static void ui_render_input_line(UserInterface *ui) {
 }
 
 // Renders a "status line" above the input line
-static void ui_render_status_line(UserInterface *ui) {
+static void render_status_line(UserInterface *ui) {
     int row = tb_height() - 2;
 
-    if (ui->erroneus)
+    if (ui->erroneus && ui->input_buffer_cursor == 0) {
         tb_printf(0, row, TB_WHITE, TB_RED, " ERROR ");
+        return;
+    }
+
+    // Summary of the currently typed function or variable
+    char out_name[100] = {0};
+    if (ui_helper_get_currently_typed_name(ui, out_name, 99, 0))
+        return;
+
+    char out_suggestion[100] = {0};
+    if (ui_helper_get_summary(out_name, out_suggestion, 99))
+        return;
+
+    tb_printf(0, row, TB_BLACK, TB_BLUE, out_suggestion);
 }
 
 // Renders the contents of the results buffer onto the TUI
-static void ui_render_results(UserInterface *ui) {
+static void render_results(UserInterface *ui) {
     int line = tb_height() - 3;
     int i = 0;
 
@@ -58,7 +72,7 @@ static void ui_render_results(UserInterface *ui) {
 }
 
 // Shows some keyboard shortcuts in the top part of the screen
-static void ui_render_help_message(UserInterface *ui) {
+static void render_help_message(UserInterface *ui) {
     int line = 1;
 
     tb_printf(2, line++, TB_CYAN, 0, "ctrl+c to quit");
@@ -66,26 +80,48 @@ static void ui_render_help_message(UserInterface *ui) {
 }
 
 // Renders the TUI according to the state in the struct UserInterface
-static void ui_render(UserInterface *ui) {
+static void render(UserInterface *ui) {
     tb_clear();
 
     tb_set_cursor(ui->input_buffer_cursor, tb_height());
 
     if (ui->results.count == 0)
-        ui_render_help_message(ui);
+        render_help_message(ui);
 
-    ui_render_input_line(ui);
-    ui_render_status_line(ui);
-    ui_render_results(ui);
+    render_input_line(ui);
+    render_status_line(ui);
+    render_results(ui);
 
     tb_present();
 }
 
-static void ui_erase_character(UserInterface *ui) {
+static void erase_character(UserInterface *ui) {
     if (ui->input_buffer_used <= 0 || ui->input_buffer_cursor <= 0)
         return;
     ui->input_buffer_used--;
     ui->input_buffer_cursor--;
+}
+
+static void autocomplete_input(UserInterface *ui) {
+    char name[100] = {0};
+    int start_position = 0;
+    if (ui_helper_get_currently_typed_name(ui, name, 99, &start_position))
+        return;
+
+    char completion[100] = {0};
+    int is_function = 0;
+    if (ui_helper_get_completion(name, completion, 99, &is_function))
+        return;
+
+    ui->input_buffer_used = start_position;
+    ui->input_buffer_cursor = start_position;
+
+    for (int i = 0; completion[i]; i++) {
+        input_character(ui, completion[i]);
+    }
+
+    if (is_function)
+        input_character(ui, '(');
 }
 
 // Handles special hotkeys and inserts other keys into the input buffer
@@ -103,12 +139,17 @@ static int ui_handle_keyboard_input(UserInterface *ui, char *out_expression) {
     if (event.key == TB_KEY_ENTER) {
         strncpy(out_expression, ui->input_buffer, ui->input_buffer_used);
         out_expression[ui->input_buffer_cursor] = 0;
-        ui_reset_input(ui);
+        reset_input(ui);
         return UI_CODE_INPUT_READY;
     }
 
+    if (event.key == TB_KEY_TAB) {
+        autocomplete_input(ui);
+        return 0;
+    }
+
     if (event.key == TB_KEY_BACKSPACE2 || event.key == TB_KEY_BACKSPACE) {
-        ui_erase_character(ui);
+        erase_character(ui);
         return 0;
     }
 
@@ -127,7 +168,7 @@ static int ui_handle_keyboard_input(UserInterface *ui, char *out_expression) {
         return 0;
     }
 
-    ui_input_character(ui, event.ch);
+    input_character(ui, event.ch);
     return 0;
 }
 
@@ -140,6 +181,6 @@ void ui_append_result(UserInterface *ui, Result result) {
 }
 
 int ui_main(UserInterface *ui, char *out_expression) {
-    ui_render(ui);
+    render(ui);
     return ui_handle_keyboard_input(ui, out_expression);
 }
