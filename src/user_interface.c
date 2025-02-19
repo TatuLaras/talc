@@ -43,12 +43,12 @@ static void render_status_line(UserInterface *ui, VariableStorage *var) {
     }
 
     // Summary of the currently typed function or variable
-    char out_name[100] = {0};
-    if (ui_helper_get_currently_typed_name(ui, out_name, 99, 0))
+    char out_name[200] = {0};
+    if (ui_helper_get_currently_typed_name(ui, out_name, 199, 0))
         return;
 
-    char out_suggestion[100] = {0};
-    if (ui_helper_get_summary(out_name, var, out_suggestion, 99))
+    char out_suggestion[200] = {0};
+    if (ui_helper_get_summary(out_name, var, out_suggestion, 199))
         return;
 
     tb_printf(0, row, TB_BLACK, TB_BLUE, out_suggestion);
@@ -104,15 +104,16 @@ static void erase_character(UserInterface *ui) {
     ui->input_buffer_cursor--;
 }
 
+// Puts the suggestion name (variable, function) into the input buffer
 static void autocomplete_input(UserInterface *ui, VariableStorage *var) {
     char name[100] = {0};
     int start_position = 0;
     if (ui_helper_get_currently_typed_name(ui, name, 99, &start_position))
         return;
 
-    char completion[100] = {0};
+    char completion[300] = {0};
     int is_function = 0;
-    if (ui_helper_get_completion(name, var, completion, 99, &is_function))
+    if (ui_helper_get_completion(name, var, completion, 299, &is_function))
         return;
 
     ui->input_buffer_used = start_position;
@@ -126,7 +127,7 @@ static void autocomplete_input(UserInterface *ui, VariableStorage *var) {
         input_character(ui, '(');
 }
 
-// Handles special hotkeys and inserts other keys into the input buffer
+// Handles special hotkeys and inserts all other keys into the input buffer
 //
 // Returns with event codes described by the UI_CODE... contants in the header
 // file, meant to be passed straight to the caller of ui_main
