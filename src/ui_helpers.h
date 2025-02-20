@@ -28,11 +28,12 @@ int ui_helper_get_currently_typed_name(UserInterface *ui, char *out_name,
 int ui_helper_get_summary(char *incomplete_name, VariableStorage *variables,
                           char *out_summary, int out_summary_length);
 
-// Returns the completed name for an incomplete name (e.g. "mi" => "min")
+// Returns the characters needed to complete an incomplete name (e.g. when
+// typing "as" the completion would be "in(" to get the completed function name
+// "asin(").
 //
 // Returns 1 if no match is found
 int ui_helper_get_completion(char *incomplete_name, VariableStorage *var,
-                             char *out_completion, int out_completion_length,
-                             int *out_is_function);
+                             char *out_completion, int out_completion_length);
 
 #endif

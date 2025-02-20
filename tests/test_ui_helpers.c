@@ -113,11 +113,9 @@ void test_correct_completion_is_returned() {
     char *incomplete = "as";
     char completion[10] = {0};
 
-    int is_function = 0;
-    TEST_ASSERT_FALSE(ui_helper_get_completion(incomplete, &var, completion, 9,
-                                               &is_function));
-    TEST_ASSERT_FALSE(strcmp("asin", completion));
-    TEST_ASSERT(is_function);
+    TEST_ASSERT_FALSE(
+        ui_helper_get_completion(incomplete, &var, completion, 9));
+    TEST_ASSERT_FALSE(strcmp("in(", completion));
 }
 
 void test_correct_variable_summary_is_returned() {
@@ -137,11 +135,24 @@ void test_correct_variable_completion_is_returned() {
     char completion[30] = {0};
 
     int is_function = 0;
-    TEST_ASSERT_FALSE(ui_helper_get_completion(incomplete, &var, completion, 29,
-                                               &is_function));
-    TEST_ASSERT_FALSE(strcmp("longvariablename", completion));
+    TEST_ASSERT_FALSE(
+        ui_helper_get_completion(incomplete, &var, completion, 29));
+    TEST_ASSERT_FALSE(strcmp("ariablename", completion));
     TEST_ASSERT_FALSE(is_function);
 }
+
+void test_completion_fails_on_no_match() {
+    char *incomplete = "longv";
+    char completion[1] = {0};
+    TEST_ASSERT(ui_helper_get_completion(incomplete, &var, completion, 0));
+}
+
+void test_get_summary_fails_on_no_match() {
+    char *incomplete = "longv";
+    char completion[1] = {0};
+    TEST_ASSERT(ui_helper_get_summary(incomplete, &var, completion, 0));
+}
+
 int main() {
     UNITY_BEGIN();
 
@@ -156,6 +167,8 @@ int main() {
     RUN_TEST(test_correct_completion_is_returned);
     RUN_TEST(test_correct_variable_summary_is_returned);
     RUN_TEST(test_correct_variable_completion_is_returned);
+    RUN_TEST(test_completion_fails_on_no_match);
+    RUN_TEST(test_get_summary_fails_on_no_match);
 
     return UNITY_END();
 }

@@ -27,7 +27,18 @@ Omia muuttujia pystyy määrittelemään kirjoittamalla laskutoimituksen alkuun 
 Tämän jälkeen muuttujaa voi käyttää lukuarvon tilalla.
 Ohjelmassa on myös joitain sisäänrakennettuja muuttujia, jotka on listattu alempana.
 
-Tulokset voi pyyhkiä `ctrl+l` -näppäinyhdistelmällä. Ohjelmasta poistuminen onnistuu `ctrl-c` -näppäinyhdistelmällä.
+Ohjelmasta poistuminen onnistuu `Ctrl+c` -näppäinyhdistelmällä.
+
+### Pikanäppäimet
+| Näppäin | |
+| --- | --- |
+| `Ctrl+c` | Poistu ohjelmasta |
+| `Enter` | Laske lauseke |
+| `Ctrl+l` | Pyyhi tulokset |
+| `Ctrl+b` tai nuoli oikealle | Liikuta kursoria oikealle |
+| `Ctrl+f` tai nuoli vasemmalle | Liikuta kursoria vasemmalle |
+| `Ctrl+e` tai `End` | Mene lausekerivin loppuun |
+| `Ctrl+a` tai `Home` | Mene lausekerivin alkuun |
 
 ### Funktiot
 | Funktio | |

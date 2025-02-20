@@ -1,5 +1,7 @@
 #include "ui_helpers.h"
 #include "symbol.h"
+#include <stdio.h>
+#include <string.h>
 
 extern FunctionNameMapping functions[SYMBOL_FUNCTION_MAPPINGS_SIZE];
 
@@ -75,16 +77,14 @@ int ui_helper_get_summary(char *incomplete_name, VariableStorage *var,
 }
 
 int ui_helper_get_completion(char *incomplete_name, VariableStorage *var,
-                             char *out_completion, int out_completion_length,
-                             int *out_is_function) {
+                             char *out_completion, int out_completion_length) {
+    int incomplete_name_length = strlen(incomplete_name);
     // Function
     FunctionNameMapping entry = {0};
 
     if (!get_documentation_entry(incomplete_name, &entry)) {
-        strncpy(out_completion, entry.name, out_completion_length);
-
-        if (out_is_function)
-            *out_is_function = 1;
+        snprintf(out_completion, out_completion_length, "%s(",
+                 entry.name + incomplete_name_length);
 
         return 0;
     }
@@ -94,7 +94,8 @@ int ui_helper_get_completion(char *incomplete_name, VariableStorage *var,
     char name[100] = {0};
     if (!variables_retrieve_suggestion(var, incomplete_name, &_value, name,
                                        99)) {
-        strncpy(out_completion, name, out_completion_length);
+        strncpy(out_completion, name + incomplete_name_length,
+                out_completion_length);
         return 0;
     }
 

@@ -3,14 +3,25 @@
 #include "results_buffer.h"
 #include "ui_helpers.h"
 #include "variables.h"
+#include <string.h>
 
 static void input_character(UserInterface *ui, char character) {
     if (ui->input_buffer_used >= UI_INPUT_BUFFER_SIZE ||
         ui->input_buffer_used >= tb_width() - 1)
         return;
 
-    ui->input_buffer[ui->input_buffer_used++] = character;
-    ui->input_buffer_cursor++;
+    // We're inserting instead of appending, shift the contents after the cursor
+    if (ui->input_buffer_used > ui->input_buffer_cursor) {
+        if (ui->input_buffer_used + 1 >= UI_INPUT_BUFFER_SIZE)
+            return;
+
+        memmove(ui->input_buffer + ui->input_buffer_cursor + 1,
+                ui->input_buffer + ui->input_buffer_cursor,
+                ui->input_buffer_used - ui->input_buffer_cursor);
+    }
+
+    ui->input_buffer[ui->input_buffer_cursor++] = character;
+    ui->input_buffer_used++;
 }
 
 static void reset_input(UserInterface *ui) {
@@ -100,6 +111,17 @@ static void render(UserInterface *ui, VariableStorage *var) {
 static void erase_character(UserInterface *ui) {
     if (ui->input_buffer_used <= 0 || ui->input_buffer_cursor <= 0)
         return;
+
+    // Cursor in the middle of input, shift leftwards
+    if (ui->input_buffer_used > ui->input_buffer_cursor) {
+        if (ui->input_buffer_used + 1 >= UI_INPUT_BUFFER_SIZE)
+            return;
+
+        memmove(ui->input_buffer + ui->input_buffer_cursor - 1,
+                ui->input_buffer + ui->input_buffer_cursor,
+                ui->input_buffer_used - ui->input_buffer_cursor);
+    }
+
     ui->input_buffer_used--;
     ui->input_buffer_cursor--;
 }
@@ -112,19 +134,20 @@ static void autocomplete_input(UserInterface *ui, VariableStorage *var) {
         return;
 
     char completion[300] = {0};
-    int is_function = 0;
-    if (ui_helper_get_completion(name, var, completion, 299, &is_function))
+    if (ui_helper_get_completion(name, var, completion, 299))
         return;
-
-    ui->input_buffer_used = start_position;
-    ui->input_buffer_cursor = start_position;
 
     for (int i = 0; completion[i]; i++) {
         input_character(ui, completion[i]);
     }
+}
 
-    if (is_function)
-        input_character(ui, '(');
+static void move_cursor(UserInterface *ui, int right) {
+    if (right && ui->input_buffer_cursor < ui->input_buffer_used)
+        ui->input_buffer_cursor++;
+
+    if (!right && ui->input_buffer_cursor > 0)
+        ui->input_buffer_cursor--;
 }
 
 // Handles special hotkeys and inserts all other keys into the input buffer
@@ -142,7 +165,7 @@ static int ui_handle_keyboard_input(UserInterface *ui, VariableStorage *var,
 
     if (event.key == TB_KEY_ENTER) {
         strncpy(out_expression, ui->input_buffer, ui->input_buffer_used);
-        out_expression[ui->input_buffer_cursor] = 0;
+        out_expression[ui->input_buffer_used] = 0;
         reset_input(ui);
         return UI_CODE_INPUT_READY;
     }
@@ -164,6 +187,26 @@ static int ui_handle_keyboard_input(UserInterface *ui, VariableStorage *var,
 
     if (event.key == TB_KEY_CTRL_N || event.key == TB_KEY_ARROW_DOWN) {
         //  TODO: next result into buffer
+        return 0;
+    }
+
+    if (event.key == TB_KEY_CTRL_B || event.key == TB_KEY_ARROW_LEFT) {
+        move_cursor(ui, 0);
+        return 0;
+    }
+
+    if (event.key == TB_KEY_CTRL_F || event.key == TB_KEY_ARROW_RIGHT) {
+        move_cursor(ui, 1);
+        return 0;
+    }
+
+    if (event.key == TB_KEY_CTRL_A || event.key == TB_KEY_HOME) {
+        ui->input_buffer_cursor = 0;
+        return 0;
+    }
+
+    if (event.key == TB_KEY_CTRL_E || event.key == TB_KEY_END) {
+        ui->input_buffer_cursor = ui->input_buffer_used;
         return 0;
     }
 
