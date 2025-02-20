@@ -2,10 +2,11 @@
 #define _RESULTS_BUF
 
 #define RESULTS_BUFFER_SIZE 64
+#define RESULTS_EXPRESSION_SIZE 1024
 
 typedef struct {
     double result;
-    char *expression;
+    char expression[RESULTS_EXPRESSION_SIZE];
     int erroneous;
 } Result;
 

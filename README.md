@@ -30,7 +30,7 @@ Ohjelmassa on myös joitain sisäänrakennettuja muuttujia, jotka on listattu al
 Ohjelmasta poistuminen onnistuu `Ctrl+c` -näppäinyhdistelmällä.
 
 ### Pikanäppäimet
-| Näppäin | |
+| Näppäin | Selitys |
 | --- | --- |
 | `Ctrl+c` | Poistu ohjelmasta |
 | `Enter` | Laske lauseke |
@@ -41,7 +41,7 @@ Ohjelmasta poistuminen onnistuu `Ctrl+c` -näppäinyhdistelmällä.
 | `Ctrl+a` tai `Home` | Mene lausekerivin alkuun |
 
 ### Funktiot
-| Funktio | |
+| Funktio | Selitys |
 | --- | --- |
 | sin(x) | Sinifunktio |
 | cos(x) | Kosinifunktio |
@@ -57,11 +57,11 @@ Ohjelmasta poistuminen onnistuu `Ctrl+c` -näppäinyhdistelmällä.
 
 ### Sisäänrakennetut muuttujat
 
-| Muuttuja | |
+| Muuttuja | Selitys |
 | --- | --- |
 | ans | Viimeisimmän laskutoimituksen tulos |
-| pi ||
-| e | Neperin luku|
+| pi | $\pi$ |
+| e | Neperin luku $e$ |
 
 ## Testit
 Projektin yksikkötestit sijaitsevat projektin juuren `/tests` -kansiossa. Kääntääksesi kaikki testit voit käyttää `/tests` -kansiossa ollessasi:

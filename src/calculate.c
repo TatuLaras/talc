@@ -114,16 +114,22 @@ int calculate_value(SymbolQueue *postfix_expression, double *out_result) {
         }
 
         // Otherwise it's an operator, so calculate
-        if (do_operation(&holding_stack, &current_symbol))
+        if (do_operation(&holding_stack, &current_symbol)) {
+            double_stack_free(&holding_stack);
             return 1;
+        }
     }
 
     // If there's not exactly one item left in the holding stack it means
     // the input expression was invalid
-    if (holding_stack.top != 1)
+    if (holding_stack.top != 1) {
+        double_stack_free(&holding_stack);
         return 1;
+    }
 
     // Result
     double_stack_pop(&holding_stack, out_result);
+
+    double_stack_free(&holding_stack);
     return 0;
 }

@@ -113,8 +113,10 @@ int infix_to_postfix(char *src_str, VariableStorage *variables,
             int current_is_literal =
                 current_symbol_length > 0 && isdigit(current_symbol[0]);
 
-            if (current_is_literal)
+            if (current_is_literal) {
+                stack_free(&holding_stack);
                 return INFIX_ERROR_MALFORMED_INPUT;
+            }
 
             current_symbol[current_symbol_length++] = src_str[i];
             continue;
@@ -130,8 +132,10 @@ int infix_to_postfix(char *src_str, VariableStorage *variables,
             int current_is_variable_name =
                 current_symbol_length > 0 && isalpha(current_symbol[0]);
 
-            if (current_is_variable_name)
+            if (current_is_variable_name) {
+                stack_free(&holding_stack);
                 return INFIX_ERROR_MALFORMED_INPUT;
+            }
 
             current_symbol[current_symbol_length++] = src_str[i];
             continue;
@@ -145,8 +149,10 @@ int infix_to_postfix(char *src_str, VariableStorage *variables,
                 !isalpha(current_symbol[0]) || out_queue->_used > 0 ||
                 holding_stack.__top > 0 || out_variable_request->valid;
 
-            if (invalid_assignment)
+            if (invalid_assignment) {
+                stack_free(&holding_stack);
                 return INFIX_ERROR_INVALID_VARIABLE_ASSIGNMENT;
+            }
 
             out_variable_request->valid = 1;
 
@@ -163,8 +169,10 @@ int infix_to_postfix(char *src_str, VariableStorage *variables,
         Symbol op = parse_operator(src_str[i]);
 
         // SYMBOL_NULL is returned to indicate error
-        if (op.type == SYMBOL_NULL)
+        if (op.type == SYMBOL_NULL) {
+            stack_free(&holding_stack);
             return INFIX_ERROR_GENERAL;
+        }
 
         if (op.type == SYMBOL_PARENTHESIS_CLOSE)
             previous_was_close_parenthesis = 1;
@@ -178,8 +186,10 @@ int infix_to_postfix(char *src_str, VariableStorage *variables,
             Symbol symbol = parse_non_operator_symbol(
                 current_symbol, is_function_name, variables);
 
-            if (symbol.type == SYMBOL_NULL)
+            if (symbol.type == SYMBOL_NULL) {
+                stack_free(&holding_stack);
                 return INFIX_ERROR_GENERAL;
+            }
 
             push_symbol_with_shunting_yard(symbol, out_queue, &holding_stack);
 
@@ -190,8 +200,10 @@ int infix_to_postfix(char *src_str, VariableStorage *variables,
             continue;
 
         // Push operator
-        if (push_symbol_with_shunting_yard(op, out_queue, &holding_stack))
+        if (push_symbol_with_shunting_yard(op, out_queue, &holding_stack)) {
+            stack_free(&holding_stack);
             return INFIX_ERROR_MISMATCHED_PARENTHESIS;
+        }
     }
 
     if (current_symbol_length > 0) {
@@ -199,12 +211,16 @@ int infix_to_postfix(char *src_str, VariableStorage *variables,
 
         Symbol symbol = parse_non_operator_symbol(current_symbol, 0, variables);
 
-        if (symbol.type == SYMBOL_NULL)
+        if (symbol.type == SYMBOL_NULL) {
+            stack_free(&holding_stack);
             return INFIX_ERROR_GENERAL;
+        }
 
         push_symbol_with_shunting_yard(symbol, out_queue, &holding_stack);
     }
 
-    // Returns possible error code
-    return drain_holding_stack_into_output(out_queue, &holding_stack);
+    int code = drain_holding_stack_into_output(out_queue, &holding_stack);
+
+    stack_free(&holding_stack);
+    return code;
 }

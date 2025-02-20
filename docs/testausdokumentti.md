@@ -11,6 +11,9 @@ On (automaatio)testattu, että:
 - Ohjelma osaa tulkita negatiiviset luvut oikein (esim `5+-2=3`)
 - Tuplamiinukset (`--2`) käsitellään tyyliin `-(-2)` (`2`)
 
+
+Ohjelma ajettu Valgrindilla ja sitä hyödyntäen korjattu vikoja muistinhallinnassa.
+
 ## Tiedostojen / käännösyksiköiden rivikattavuudet
 Mitattu `gcov` -työkalulla (kts. [README](../README.md)).
 | Tiedosto | Kattavuus |
@@ -19,3 +22,5 @@ Mitattu `gcov` -työkalulla (kts. [README](../README.md)).
 <!-- | `src/symbol_stack.c`      | 100%      | -->
 <!-- | `src/calculate.c`         | 100%      | -->
 <!-- | `src/infix_to_postfix.c`  | 100%      | -->
+
+

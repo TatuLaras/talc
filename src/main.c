@@ -26,13 +26,17 @@ int main() {
 
         if (code == UI_CODE_INPUT_READY) {
             SymbolQueue rpn = {0};
-            VariableAssignmentRequest variable_assignment_request = {0};
             queue_init(&rpn);
+
+            VariableAssignmentRequest variable_assignment_request = {0};
 
             // Initialize a Result object to store the result in
             Result result = {0};
-            result.expression = malloc(strlen(input_expression) * sizeof(char));
-            strcpy(result.expression, input_expression);
+            int limit = UI_INPUT_BUFFER_SIZE;
+            if (RESULTS_EXPRESSION_SIZE < UI_INPUT_BUFFER_SIZE)
+                limit = RESULTS_EXPRESSION_SIZE;
+
+            strncpy(result.expression, input_expression, limit);
 
             // Convert to reverse polish notation
             if (infix_to_postfix(input_expression, &variables, &rpn,
@@ -40,6 +44,7 @@ int main() {
                 result.erroneous = 1;
                 ui.erroneus = 1;
                 ui_append_result(&ui, result);
+                queue_free(&rpn);
                 continue;
             }
 
@@ -56,11 +61,15 @@ int main() {
                 variables_assign(&variables, "ans", result.result);
             }
 
+            // We append the result whether or not it was erroneus, for
+            // bash style edit previous functionality (to be implemented later)
             ui_append_result(&ui, result);
+            queue_free(&rpn);
         }
     }
 
     ui_shutdown(&ui);
+    variables_free(&variables);
 
     return 0;
 }

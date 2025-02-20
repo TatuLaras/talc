@@ -21,7 +21,7 @@ int ui_helper_get_currently_typed_name(UserInterface *ui, char *out_name,
                                        int out_name_length,
                                        int *out_start_position);
 
-// Returns a summary (if any) for an incomplete name (e.g. "mi" would return
+// Returns a summary for an incomplete name (e.g. "ma" would return
 // something like "max(x, y) - Returns the maximum of x and y").
 //
 // Returns 1 if no match is found

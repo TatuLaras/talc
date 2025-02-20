@@ -1,5 +1,4 @@
 #include "variables.h"
-#include <string.h>
 
 void variables_init(VariableStorage *var) {
     var->_size = VARIABLES_STARTING_SIZE;

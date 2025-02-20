@@ -2,6 +2,7 @@
 #define _VARIABLES
 
 #include <stdlib.h>
+#include <string.h>
 
 #define VARIABLES_STARTING_SIZE 8
 #define VARIABLES_NAME_MAX_LENGTH 128
