@@ -55,7 +55,7 @@ static void render_status_line(UserInterface *ui, VariableStorage *var) {
 
     // Summary of the currently typed function or variable
     char out_name[200] = {0};
-    if (ui_helper_get_currently_typed_name(ui, out_name, 199, 0))
+    if (ui_helper_get_currently_typed_name(ui, out_name, 199))
         return;
 
     char out_suggestion[200] = {0};
@@ -129,8 +129,7 @@ static void erase_character(UserInterface *ui) {
 // Puts the suggestion name (variable, function) into the input buffer
 static void autocomplete_input(UserInterface *ui, VariableStorage *var) {
     char name[100] = {0};
-    int start_position = 0;
-    if (ui_helper_get_currently_typed_name(ui, name, 99, &start_position))
+    if (ui_helper_get_currently_typed_name(ui, name, 99))
         return;
 
     char completion[300] = {0};

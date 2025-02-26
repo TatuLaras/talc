@@ -85,11 +85,22 @@ void test_out_of_bounds_value_should_fail() {
     TEST_ASSERT_EQUAL(45, out_symbol);
 }
 
+void test_popping_from_empty_stack_fails() {
+    DoubleStack stack = {0};
+    double_stack_init(&stack);
+
+    double out;
+    TEST_ASSERT(double_stack_pop(&stack, &out));
+}
+
 int main() {
     UNITY_BEGIN();
+
     RUN_TEST(test_double_stack_should_grow);
     RUN_TEST(test_double_stack_should_contain_pushed_values);
     RUN_TEST(test_double_stack_popping_works);
     RUN_TEST(test_out_of_bounds_value_should_fail);
+    RUN_TEST(test_popping_from_empty_stack_fails);
+
     return UNITY_END();
 }

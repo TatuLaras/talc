@@ -16,11 +16,15 @@ Ohjelma ajettu Valgrindilla ja sitä hyödyntäen korjattu vikoja muistinhallinn
 
 ## Tiedostojen / käännösyksiköiden rivikattavuudet
 Mitattu `gcov` -työkalulla (kts. [README](../README.md)).
-| Tiedosto | Kattavuus |
-| --- | --- |
-| TBD | |
-<!-- | `src/symbol_stack.c`      | 100%      | -->
-<!-- | `src/calculate.c`         | 100%      | -->
-<!-- | `src/infix_to_postfix.c`  | 100%      | -->
-
-
+| Käännösyksikkö | Kattavuus | |
+| --- | --- | --- |
+| calculate | 100% |
+| double_stack | 100% |
+| queue | 100% |
+| infix_to_postfix | 100% |
+| symbol_stack | 100% |
+| ui_helpers | 100% |
+| variables | 100% |
+| results_buffer | 100% |
+| queue | 100% |
+| symbol | 60.82% | `num_operands` -funktio |

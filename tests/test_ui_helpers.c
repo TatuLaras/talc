@@ -16,7 +16,7 @@ void test_currently_typed_name_parsed_correctly_simple_case() {
     ui.input_buffer_cursor = strlen(str);
 
     char result[100] = {0};
-    TEST_ASSERT_FALSE(ui_helper_get_currently_typed_name(&ui, result, 100, 0));
+    TEST_ASSERT_FALSE(ui_helper_get_currently_typed_name(&ui, result, 100));
     TEST_ASSERT_EQUAL(0, strcmp("hello", result));
 }
 
@@ -29,7 +29,7 @@ void test_currently_typed_name_parsed_correctly_only_name() {
     ui.input_buffer_cursor = strlen(str);
 
     char result[100] = {0};
-    TEST_ASSERT_FALSE(ui_helper_get_currently_typed_name(&ui, result, 100, 0));
+    TEST_ASSERT_FALSE(ui_helper_get_currently_typed_name(&ui, result, 100));
     TEST_ASSERT_EQUAL(0, strcmp("hello", result));
 }
 
@@ -42,7 +42,7 @@ void test_currently_typed_name_parsed_correctly_complicated_case() {
     ui.input_buffer_cursor = strlen(str);
 
     char result[100] = {0};
-    TEST_ASSERT_FALSE(ui_helper_get_currently_typed_name(&ui, result, 100, 0));
+    TEST_ASSERT_FALSE(ui_helper_get_currently_typed_name(&ui, result, 100));
     TEST_ASSERT_EQUAL(0, strcmp("thisshouldbeit", result));
 }
 
@@ -55,7 +55,7 @@ void test_currently_typed_name_fails_on_number() {
     ui.input_buffer_cursor = strlen(str);
 
     char result[100] = {0};
-    TEST_ASSERT(ui_helper_get_currently_typed_name(&ui, result, 100, 0));
+    TEST_ASSERT(ui_helper_get_currently_typed_name(&ui, result, 100));
 }
 
 void test_currently_typed_name_fails_on_operator() {
@@ -67,7 +67,7 @@ void test_currently_typed_name_fails_on_operator() {
     ui.input_buffer_cursor = strlen(str);
 
     char result[100] = {0};
-    TEST_ASSERT(ui_helper_get_currently_typed_name(&ui, result, 100, 0));
+    TEST_ASSERT(ui_helper_get_currently_typed_name(&ui, result, 100));
 }
 
 void test_currently_typed_name_fails_on_parenthesis() {
@@ -79,7 +79,7 @@ void test_currently_typed_name_fails_on_parenthesis() {
     ui.input_buffer_cursor = strlen(str);
 
     char result[100] = {0};
-    TEST_ASSERT(ui_helper_get_currently_typed_name(&ui, result, 100, 0));
+    TEST_ASSERT(ui_helper_get_currently_typed_name(&ui, result, 100));
 }
 
 void test_currently_typed_name_wont_overflow() {
@@ -91,7 +91,7 @@ void test_currently_typed_name_wont_overflow() {
     ui.input_buffer_cursor = strlen(str);
 
     char result[100] = {0};
-    TEST_ASSERT_FALSE(ui_helper_get_currently_typed_name(&ui, result, 5, 0));
+    TEST_ASSERT_FALSE(ui_helper_get_currently_typed_name(&ui, result, 5));
     TEST_ASSERT_FALSE(result[5]);
 }
 
@@ -153,6 +153,12 @@ void test_get_summary_fails_on_no_match() {
     TEST_ASSERT(ui_helper_get_summary(incomplete, &var, completion, 0));
 }
 
+void test_get_summary_fails_on_empty_incomplete_name() {
+    char *incomplete = "";
+    char completion[1] = {0};
+    TEST_ASSERT(ui_helper_get_summary(incomplete, &var, completion, 0));
+}
+
 int main() {
     UNITY_BEGIN();
 
@@ -169,6 +175,7 @@ int main() {
     RUN_TEST(test_correct_variable_completion_is_returned);
     RUN_TEST(test_completion_fails_on_no_match);
     RUN_TEST(test_get_summary_fails_on_no_match);
+    RUN_TEST(test_get_summary_fails_on_empty_incomplete_name);
 
     return UNITY_END();
 }

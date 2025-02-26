@@ -1,5 +1,7 @@
 #include "symbol.h"
 
+//  TODO: Num operands into this table
+
 FunctionNameMapping functions[SYMBOL_FUNCTION_MAPPINGS_SIZE] = {
     {.name = "min",
      .type = SYMBOL_FUNC_MIN,

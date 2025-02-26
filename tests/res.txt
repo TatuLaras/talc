@@ -1,0 +1,65 @@
+File '../src/calculate.c'
+Lines executed:100.00% of 86
+Creating 'calculate.c.gcov'
+
+File '../src/double_stack.c'
+Lines executed:76.58% of 111
+Creating 'double_stack.c.gcov'
+
+File '../src/infix_to_postfix.c'
+Lines executed:92.59% of 351
+Creating 'infix_to_postfix.c.gcov'
+
+File '../src/queue.c'
+Lines executed:87.12% of 132
+Creating 'queue.c.gcov'
+
+File '../src/symbol.c'
+Lines executed:62.11% of 388
+Creating 'symbol.c.gcov'
+
+File '../src/symbol_stack.c'
+Lines executed:74.44% of 180
+Creating 'symbol_stack.c.gcov'
+
+File 'test_calculate.c'
+Lines executed:100.00% of 240
+Creating 'test_calculate.c.gcov'
+
+File '../src/external/unity.c'
+Lines executed:10.06% of 6720
+Creating 'unity.c.gcov'
+
+File '../src/variables.c'
+Lines executed:70.22% of 225
+Creating 'variables.c.gcov'
+
+File 'test_double_stack.c'
+Lines executed:100.00% of 60
+Creating 'test_double_stack.c.gcov'
+
+File 'test_infix_to_postfix.c'
+Lines executed:100.00% of 303
+Creating 'test_infix_to_postfix.c.gcov'
+
+File 'test_queue.c'
+Lines executed:100.00% of 62
+Creating 'test_queue.c.gcov'
+
+File 'test_stack.c'
+Lines executed:100.00% of 61
+Creating 'test_stack.c.gcov'
+
+File 'test_ui_helpers.c'
+Lines executed:100.00% of 127
+Creating 'test_ui_helpers.c.gcov'
+
+File '../src/ui_helpers.c'
+Lines executed:95.83% of 48
+Creating 'ui_helpers.c.gcov'
+
+File 'test_variables.c'
+Lines executed:90.00% of 70
+Creating 'test_variables.c.gcov'
+
+Lines executed:30.36% of 9164

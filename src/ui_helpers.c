@@ -26,8 +26,7 @@ static int get_documentation_entry(char *incomplete_name,
 }
 
 int ui_helper_get_currently_typed_name(UserInterface *ui, char *out_name,
-                                       int out_name_length,
-                                       int *out_start_position) {
+                                       int out_name_length) {
     int start = ui->input_buffer_cursor - 1;
 
     while (start > 0 && isalnum(ui->input_buffer[start]))
@@ -35,9 +34,6 @@ int ui_helper_get_currently_typed_name(UserInterface *ui, char *out_name,
 
     if (start > 0)
         start++;
-
-    if (out_start_position)
-        *out_start_position = start;
 
     // The user is not typing a variable or a function
     if (isdigit(ui->input_buffer[start]) ||

@@ -37,15 +37,6 @@ int double_stack_peek_from_top(DoubleStack *stack, int n, double *out_symbol) {
     return 0;
 }
 
-int double_stack_get(DoubleStack *stack, int i, double *out_symbol) {
-    if (i >= stack->top || i < 0)
-        return 1;
-
-    *out_symbol = stack->_array[i];
-
-    return 0;
-}
-
 int double_stack_pop(DoubleStack *stack, double *out_symbol) {
     if (stack->top == 0) {
         return 1;

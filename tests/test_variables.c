@@ -1,5 +1,6 @@
 #include "../src/external/unity.h"
 #include "../src/variables.h"
+#include <string.h>
 
 static VariableStorage var = {0};
 
@@ -88,6 +89,46 @@ void test_bug_reproduction() {
     TEST_ASSERT_EQUAL(81231, name123);
 }
 
+void test_assignment_request_assigns() {
+    VariableAssignmentRequest request = {
+        .name = "name123",
+        .valid = 1,
+    };
+
+    variables_fullfill_assignment_request(&var, &request, 81231);
+
+    double name123 = 0;
+    TEST_ASSERT_FALSE(variables_retrieve(&var, "name123", &name123));
+    TEST_ASSERT_EQUAL(81231, name123);
+}
+
+void test_retrieve_suggestion() {
+    variables_assign(&var, "name123", 81231);
+    variables_assign(&var, "another8", 456134);
+    double value = 0;
+    char name[100];
+    TEST_ASSERT_FALSE(
+        variables_retrieve_suggestion(&var, "na", &value, name, 99));
+    TEST_ASSERT_EQUAL(81231, value);
+    TEST_ASSERT_EQUAL(0, strcmp(name, "name123"));
+}
+
+void test_retrieve_fails_on_empty_incomplete_name() {
+    variables_assign(&var, "name123", 81231);
+
+    double value = 0;
+    char name[1];
+    TEST_ASSERT(variables_retrieve_suggestion(&var, "", &value, name, 0));
+}
+
+void test_retrieve_suggestion_fails_on_undefined_variable() {
+    variables_assign(&var, "name123", 81231);
+
+    double value = 0;
+    char name[1];
+    TEST_ASSERT_TRUE(
+        variables_retrieve_suggestion(&var, "xyz", &value, name, 0));
+}
 int main() {
     UNITY_BEGIN();
 
@@ -95,6 +136,10 @@ int main() {
     RUN_TEST(test_undefined_variable);
     RUN_TEST(test_array_should_grow);
     RUN_TEST(test_variable_reassignment);
+    RUN_TEST(test_assignment_request_assigns);
+    RUN_TEST(test_retrieve_suggestion);
+    RUN_TEST(test_retrieve_fails_on_empty_incomplete_name);
+    RUN_TEST(test_retrieve_suggestion_fails_on_undefined_variable);
 
     return UNITY_END();
 }

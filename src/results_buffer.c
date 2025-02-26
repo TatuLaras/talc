@@ -11,7 +11,7 @@ void results_buffer_push(ResultsBuffer *buffer, Result result) {
 
 int results_buffer_get_latest(ResultsBuffer *buffer, int i,
                               Result *out_result) {
-    if (i >= buffer->count || i >= RESULTS_BUFFER_SIZE)
+    if (i >= buffer->count || i >= RESULTS_BUFFER_SIZE || i < 0)
         return 1;
 
     *out_result =

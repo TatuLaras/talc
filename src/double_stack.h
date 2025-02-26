@@ -31,6 +31,4 @@ int double_stack_pop(DoubleStack *stack, double *out_element);
 // Returns 1 if n is out of bounds
 int double_stack_peek_from_top(DoubleStack *stack, int n, double *out_element);
 
-int double_stack_get(DoubleStack *stack, int i, double *out_element);
-
 #endif

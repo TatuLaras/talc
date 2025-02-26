@@ -18,8 +18,7 @@
 //
 // Not an internal static function for unit testing purposes.
 int ui_helper_get_currently_typed_name(UserInterface *ui, char *out_name,
-                                       int out_name_length,
-                                       int *out_start_position);
+                                       int out_name_length);
 
 // Returns a summary for an incomplete name (e.g. "ma" would return
 // something like "max(x, y) - Returns the maximum of x and y").
